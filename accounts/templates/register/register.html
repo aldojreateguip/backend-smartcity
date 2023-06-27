@@ -3,7 +3,7 @@
 {% block title %} Registro {% endblock title %}
 
 {% block content %}
-<main class="w-full min-h-screen max-w-[120rem] mx-auto flex flex-col bg-cover bg-center" style="background-image: url('img/fondo.png');">
+<main class="w-full min-h-screen max-w-[120rem] mx-auto flex flex-col bg-cover bg-center" style="background-image: url({% static 'img/fondo.png' %});">
     <div class="w-full min-h-[calc(100vh-40px)] items-start flex justify-center pb-4 px-4 bg-gradient-to-b from-sky-500/80 to-blue-800/80">
         <form action="" class="text-center w-full mt-10 mb-2 sm:w-2/3 lg:w-96 rounded-lg shadow-md pb-12 bg-white" method="POST" autocomplete="off" novalidate>                             
             <h1 class="uppercase text-lg text-white font-bold rounded-t-lg p-4 bg-[#1C3C6D]">Registro</h1>
@@ -15,20 +15,23 @@
             <h6 class="text-gray-500 text-lg sm:text-sm px-8 sm:px-4">Por favor, ingrese sus datos</h6>        
             <div>
                 <div class="flex flex-col items-start sm:mt-6 mt-8 px-4 sm:px-8">
-                    <label for="" class="text-left text-gray-500">Nombre</label>
-                    <input class="w-full p-2 border-2 rounded-lg text-md border-gray-500 focus:ring-0 focus:border-2 focus:border-blue-500 focus:outline-none focus:placeholder-transparent" type="text" name="name" placeholder="">
+                    <label for="{{ pers_form.pers_chnomper.id_for_label }}" class="text-left text-gray-500">Nombre</label>
+                    {{ pers_form.pers_chnomper }} 
+                    
                 </div>
                 <div class="flex flex-col items-start sm:mt-6 mt-8 px-4 sm:px-8">
-                    <label for="" class="text-left text-gray-500">Apellidos</label>
-                    <input class="w-full p-2 border-2 rounded-lg text-md border-gray-500 focus:ring-0 focus:border-2 focus:border-blue-500 focus:outline-none focus:placeholder-transparent" type="text" name="lastname" placeholder="">
+                    <label for="{{pers_form.pers_chapeper.id_for_label}}" class="text-left text-gray-500">Apellidos</label>
+                    {{pers_form.pers_chapeper}}
+                    
                 </div>
                 <div class="flex flex-col items-start sm:mt-6 mt-8 px-4 sm:px-8">
-                    <label for="" class="text-left text-gray-500">DNI</label>
-                    <input class="w-full p-2 border-2 rounded-lg text-md border-gray-500 focus:ring-0 focus:border-2 focus:border-blue-500 focus:outline-none focus:placeholder-transparent" type="text" name="dni" placeholder="">
+                    <label for="{{pers_form.pers_chdocide.id_for_label}}" class="text-left text-gray-500">DNI</label>
+                    {{pers_form.pers_chdocide}}
+                    
                 </div>
                 <div class="flex flex-col items-start sm:mt-6 mt-8 px-4 sm:px-8">
-                    <label for="" class="text-left text-gray-500">Correo</label>
-                    <input class="w-full p-2 border-2 rounded-lg text-md border-gray-500 focus:ring-0 focus:border-2 focus:border-blue-500 focus:outline-none focus:placeholder-transparent" type="email" name="email" placeholder="correo@dominio.com">
+                    <label for="{{pers_form.pers_chemaper.id_for_label}}" class="text-left text-gray-500">Correo</label>
+                    {{pers_form.pers_chemaper}}                    
                 </div>                    
             </div>
             
@@ -44,7 +47,7 @@
             </div>                
         </form>
 
-        <form action="" class="text-center w-full mt-10 mb-2 sm:w-2/3 lg:w-96 rounded-lg shadow-md pb-12 bg-white" method="POST" id="step2" style="display:none;" autocomplete="off" novalidate>                             
+        <form action="" style="display:none;" class="text-center w-full mt-10 mb-2 sm:w-2/3 lg:w-96 rounded-lg shadow-md pb-12 bg-white" method="POST" id="step2" autocomplete="off" novalidate>                             
                 <h1 class="uppercase text-lg text-white font-bold rounded-t-lg p-4 bg-[#1C3C6D]">Registro</h1>
                 <div class="w-full flex items-center justify-center gap-x-2 mb-2 p-4">
                     <div class="rounded-full py-2 px-4 bg-gray-500 text-white">1</div>
@@ -54,22 +57,24 @@
                 <h6 class="text-gray-500 text-lg sm:text-sm px-8 sm:px-4">Por favor, ingrese sus datos</h6>        
                 <div>
                     <div class="flex flex-col items-start sm:mt-6 mt-8 px-4 sm:px-8">
-                        <label for="" class="text-left text-gray-500">Dirección</label>
+                        <label for="" class="text-left text-gray-500">Dirección no-funka</label>                        
                         <input class="w-full p-2 border-2 rounded-lg text-md border-gray-500 focus:ring-0 focus:border-2 focus:border-blue-500 focus:outline-none focus:placeholder-transparent" type="text" name="name" placeholder="">
                     </div>
                     <div class="flex flex-col items-start sm:mt-6 mt-8 px-4 sm:px-8">
-                        <label for="" class="text-left text-gray-500">Celular</label>
-                        <input class="w-full p-2 border-2 rounded-lg text-md border-gray-500 focus:ring-0 focus:border-2 focus:border-blue-500 focus:outline-none focus:placeholder-transparent" type="text" name="lastname" placeholder="">
+                        <label for="{{pers_form.pers_chcelper.id_for_label}} " class="text-left text-gray-500">Celular</label>
+                        {{pers_form.pers_chcelper}}  
+                        
                     </div>                   
                     <div class="flex flex-col items-start sm:mt-6 mt-8 px-4 sm:px-8">
-                        <label for="" class="text-left text-gray-500">Usuario</label>
-                        <input class="w-full p-2 border-2 rounded-lg text-md border-gray-500 focus:ring-0 focus:border-2 focus:border-blue-500 focus:outline-none focus:placeholder-transparent" type="text" name="username" placeholder="">
+                        <label for="{{usua_form.usua_chlogusu.id_for_label}}" class="text-left text-gray-500">Usuario</label>
+                        {{usua_form.usua_chlogusu}}
+                        
                     </div>
                     <div class="relative sm:mt-6 mt-8 px-4 sm:px-8">
                         <div class="flex items-center">
                             <div class="w-full flex flex-col items-start">
-                                <label for="" class="text-left text-gray-500">Contraseña</label>
-                                <input id="passwordInput" class="w-full p-2 border-2 rounded-lg text-md border-gray-500 focus:ring-0 focus:border-2 focus:border-blue-500 focus:outline-none focus:placeholder-transparent" type="password" name="password" placeholder="">
+                                <label for="{{usua_form.usua_chpasusu.id_for_label}}" class="text-left text-gray-500">Contraseña</label>
+                                {{usua_form.usua_chpasusu}}                                
                             </div>
                             <svg id="eye" class="absolute right-6 sm:right-10 bottom-2 z-50 cursor-pointer fill-gray-400 hover:fill-gray-800  transition ease-in" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-eye-fill ml-2 text-gray-500 cursor-pointer hover:text-gray-700" viewBox="0 0 16 16">
                                 <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
@@ -81,7 +86,7 @@
                 </div>
                 
                 <div class="px-2 sm:px-4">
-                    <input class="uppercase mt-9 w-full bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg cursor-pointer transition ease-in focus:outline-none" type="submit" value="Confirmar">     
+                        
                     <button id="step3Submit" type="submit" class="uppercase mt-9 w-full bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg cursor-pointer transition ease-in focus:outline-none">
                         <svg id="spin-registrarse" class="hidden animate-spin -ml-1 mr-2 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -99,4 +104,33 @@
         </div>
     </footer>
 </main>
+
+<script>
+    const svg = document.getElementById("eye");
+    const passwordInput = document.getElementById("id_usua_chpasusu");
+    let passwordVisible = false;
+
+    svg.addEventListener("click", function() {
+        if (passwordVisible) {
+            passwordInput.type = "password";
+            passwordVisible = false;
+            svg.style.fill = "";
+        } else {
+            passwordInput.type = "text";
+            passwordVisible = true;
+            svg.style.fill = "#1f2937";
+        }
+    });
+    function showSpinner() {
+        document.getElementById('load-modal').classList.remove('hidden');
+        document.getElementById('load-modal').classList.add('flex');
+
+      }
+  
+      window.onload = function() {
+        document.getElementById('load-modal').classList.remove('flex');
+        document.getElementById('load-modal').classList.add('hidden');
+      };
+    
+</script>
 {% endblock  %}
