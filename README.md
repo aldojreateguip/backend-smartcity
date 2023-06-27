@@ -19,15 +19,16 @@ Este proyecto se desarrollará utilizando el framework Django de Python, aprovec
 
 Sigue estos pasos para instalar y configurar el entorno de desarrollo de tu proyecto:
 
+```bash
 1. Clona el repositorio de GitHub:
 
 git clone https://github.com/juan-huamani/backend-smartcity.git
 
 2. Crea y activa un entorno virtual (opcional, pero se recomienda)
 
-Instalar: pip install virtualenv
-Crear entorno virtual: virtualenv venv
-Activar entorno virtual: source venv/Scripts/activate
+(Instalar) pip install virtualenv
+(Crear entorno virtual) virtualenv venv
+(Activar entorno virtual) source venv/Scripts/activate
 
 3. Instala las dependencias del proyecto (Asegurarse de que el entorno virtual este activado)
 
