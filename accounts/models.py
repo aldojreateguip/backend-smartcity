@@ -12,7 +12,6 @@ class MPers(models.Model):
     tipo_f_incodper = models.IntegerField(db_column='TIPO_F_inCODPER')  # Field name made lowercase.
 
     class Meta:
-        managed = False
         db_table = 'm_pers'
 
 class MUsua(models.Model):
@@ -23,7 +22,6 @@ class MUsua(models.Model):
     pers_f_incodper = models.IntegerField(db_column='PERS_F_inCODPER')  # Field name made lowercase.
 
     class Meta:
-        managed = False
         db_table = 'm_usua'
 
 class STipoPers(models.Model):
@@ -32,7 +30,6 @@ class STipoPers(models.Model):
     esta_f_incodest = models.IntegerField(db_column='ESTA_F_inCODEST')  # Field name made lowercase.
 
     class Meta:
-        managed = False
         db_table = 's_tipo_pers'
 
 class STipoUsua(models.Model):
@@ -41,5 +38,4 @@ class STipoUsua(models.Model):
     esta_f_incodest = models.IntegerField(db_column='ESTA_F_inCODEST')  # Field name made lowercase.
 
     class Meta:
-        managed = False
         db_table = 's_tipo_usua'
