@@ -1,21 +1,8 @@
 {% extends 'core/base.html' %}
 {% load static %}
-{% block content %}
+{% block title %} Smart City &mdash; Maynas {% endblock title %}
 
-{% comment %} <form method="POST" class="max-w-sm mx-auto">
-    {% csrf_token %}
-    <div class="mb-4">
-    <label for="{{ form.username.id_for_label }}" class="block text-gray-700 text-sm font-bold mb-2">Nombre de usuario</label>
-    {{ form.username }}
-    </div>
-    <div class="mb-4">
-    <label for="{{ form.password.id_for_label }}" class="block text-gray-700 text-sm font-bold mb-2">Contraseña</label>
-    {{ form.password }}
-    </div>
-    <div class="flex items-center justify-between">
-    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Iniciar sesión</button>
-    </div>
-</form> {% endcomment %}
+{% block content %}
 
 <main class="w-full min-h-screen max-w-[120rem] mx-auto flex flex-col items-center bg-cover bg-center" style="background-image: url({% static 'img/fondo.png' %});">
     <div class="w-full min-h-[calc(100vh-40px)] flex items-center justify-center pb-4 px-4 bg-gradient-to-b from-cyan-600/80 to-blue-800/80">
@@ -51,14 +38,14 @@
     </div>
     <footer class="w-full mx-auto mt-auto bg-blue-800/80">
         <div>
-            <p class="text-center text-slate-700 py-2 px-4">Developed by OSTI - 2023</p>
+            <p class="text-center text-slate-700 py-2 px-4">Developed by OSTI &mdash; 2023</p>
         </div>
     </footer>
 </main>
 
 
 <div id="load-modal" class="hidden fixed z-[90] inset-0 items-center justify-center overflow-y-auto transition ease-in">
-    <div class="flex flex-col justify-center items-center bg-black/50 w-32 rounded-lg aspect-square">
+    <div class="flex flex-col justify-center items-center bg-slate-800/50 w-32 rounded-lg aspect-square">
         <svg class="animate-spin -ml-1 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -66,5 +53,34 @@
         <p class="text-white mt-2">CARGANDO...</p>
     </div>
 </div>
+
+<script>
+    const svg = document.getElementById("eye");
+    const passwordInput = document.getElementById("id_password");
+    let passwordVisible = false;
+
+    svg.addEventListener("click", function() {
+        if (passwordVisible) {
+            passwordInput.type = "password";
+            passwordVisible = false;
+            svg.style.fill = "";
+        } else {
+            passwordInput.type = "text";
+            passwordVisible = true;
+            svg.style.fill = "#1f2937";
+        }
+    });
+    function showSpinner() {
+        document.getElementById('load-modal').classList.remove('hidden');
+        document.getElementById('load-modal').classList.add('flex');
+
+      }
+  
+      window.onload = function() {
+        document.getElementById('load-modal').classList.remove('flex');
+        document.getElementById('load-modal').classList.add('hidden');
+      };
+    
+</script>
 
 {% endblock  %}
