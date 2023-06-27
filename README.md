@@ -28,9 +28,27 @@ git clone https://github.com/juan-huamani/backend-smartcity.git
 ```
 2. Crea y activa un entorno virtual (opcional, pero se recomienda)
 
-(Instalar) ```bash  pip install virtualenv ```
-(Crear entorno virtual) ```bash virtualenv venv ```
-(Activar entorno virtual) ```bash source venv/Scripts/activate ```
+- Instalar 
+
+```bash
+
+pip install virtualenv 
+
+```
+- Crear entorno virtual 
+
+```bash 
+
+virtualenv venv 
+
+```
+- Activar entorno virtual 
+
+```bash 
+
+source venv/Scripts/activate 
+
+```
 
 3. Instala las dependencias del proyecto (Asegurarse de que el entorno virtual este activado)
 ```bash
