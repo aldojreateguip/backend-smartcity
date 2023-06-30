@@ -1,14 +1,17 @@
-from django.contrib.auth.backends import ModelBackend
+from django.contrib.auth.backends import BaseBackend
 from .models import MUsua
 
-class MUsuaBackend(ModelBackend):
-    def authenticate(self, request, username=None, password=None, **kwargs):
+class MUsuaBackend(BaseBackend):
+    def authenticate(self, request, username=None, password=None):
         try:
             user = MUsua.objects.get(usua_chlogusu=username)
+            if user.check_password(password):
+                return user
         except MUsua.DoesNotExist:
             return None
-        
-        if user.usua_chpasusu == password:
-            return user
-        else:
+
+    def get_user(self, user_id):
+        try:
+            return MUsua.objects.get(pk=user_id)
+        except MUsua.DoesNotExist:
             return None
