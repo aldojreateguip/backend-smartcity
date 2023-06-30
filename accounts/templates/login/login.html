@@ -1,19 +1,82 @@
 {% extends 'core/base.html' %}
+{% load static %}
+{% block title %} Smart City &mdash; Maynas {% endblock title %}
+
 {% block content %}
 
-<form method="POST" class="max-w-sm mx-auto">
-    {% csrf_token %}
-    <div class="mb-4">
-    <label for="{{ form.username.id_for_label }}" class="block text-gray-700 text-sm font-bold mb-2">Nombre de usuario</label>
-    {{ form.username }}
+<main class="w-full min-h-screen max-w-[120rem] mx-auto flex flex-col items-center bg-cover bg-center" style="background-image: url({% static 'img/fondo.png' %});">
+    <div class="w-full min-h-[calc(100vh-40px)] flex items-center justify-center pb-4 px-4 bg-gradient-to-b from-cyan-600/80 to-blue-800/80">
+        <form action="" onsubmit="showSpinner()" class="text-center w-full sm:w-2/3 lg:w-96 rounded-lg shadow-xl pb-10 bg-white" method="POST" autocomplete="off" novalidate>  
+            {% csrf_token %}                           
+            <h1 class="uppercase tracking-wide text-lg text-white font-semibold rounded-t-lg py-2 px-4 bg-[#1C3C6D]">Iniciar Sesión</h1>
+            <img class="mt-2 w-80 mx-auto object-contain" src="{% static 'img/LOGO-MAYNAS-02.png' %}" alt="MPM">
+            <h6 class="text-gray-500 text-lg sm:text-sm">Por favor, ingrese sus credenciales</h6>        
+            <div>
+                <div class="flex flex-col items-start mt-6 px-4">
+                    <label for="{{ form.username.id_for_label }}" class="text-left text-gray-500">Usuario</label>
+                    {{ form.username }}                    
+                </div>
+                <div class="relative px-4 mt-6">
+                    <div class="flex items-center">
+                        <div class="w-full flex flex-col items-start">
+                            <label for="{{ form.password.id_for_label }}" class="text-left text-gray-500">Contraseña</label>
+                            {{ form.password.as_widget }}                           
+                        </div>
+                        <svg id="eye" class="absolute right-6 bottom-2 z-50 cursor-pointer fill-gray-400 hover:fill-gray-800  transition ease-in" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-eye-fill ml-2 text-gray-500 cursor-pointer hover:text-gray-700" viewBox="0 0 16 16">
+                            <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
+                            <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <a href="#" class="text-gray-800 underline text-lg sm:text-sm mt-6 float-right pr-5 hover:text-blue-500">¿Olvidaste tu contraseña?</a>
+            <div class="px-2 sm:px-4">
+                <input class="mt-9 w-full bg-[#1C3C6D] hover:bg-blue-800 text-white font-semibold py-2 px-4 rounded-lg cursor-pointer transition ease-in focus:outline-none" type="submit" value="INGRESAR">
+            </div>
+            <p class="text-gray-500 text-lg sm:text-sm mt-5">¿No tienes una cuenta? <a href="{% url 'register' %}" class="text-gray-800 hover:text-blue-500">Regístrate aquí</a></p>
+        </form>
     </div>
-    <div class="mb-4">
-    <label for="{{ form.password.id_for_label }}" class="block text-gray-700 text-sm font-bold mb-2">Contraseña</label>
-    {{ form.password }}
+
+</main>
+
+
+<div id="load-modal" class="hidden fixed z-[90] inset-0 items-center justify-center overflow-y-auto transition ease-in">
+    <div class="flex flex-col justify-center items-center bg-slate-800/50 w-32 rounded-lg aspect-square">
+        <svg class="animate-spin -ml-1 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <p class="text-white mt-2">CARGANDO...</p>
     </div>
-    <div class="flex items-center justify-between">
-    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Iniciar sesión</button>
-    </div>
-</form>
+</div>
+
+<script>
+    const svg = document.getElementById("eye");
+    const passwordInput = document.getElementById("id_password");
+    let passwordVisible = false;
+
+    svg.addEventListener("click", function() {
+        if (passwordVisible) {
+            passwordInput.type = "password";
+            passwordVisible = false;
+            svg.style.fill = "";
+        } else {
+            passwordInput.type = "text";
+            passwordVisible = true;
+            svg.style.fill = "#1f2937";
+        }
+    });
+    function showSpinner() {
+        document.getElementById('load-modal').classList.remove('hidden');
+        document.getElementById('load-modal').classList.add('flex');
+
+      }
+  
+      window.onload = function() {
+        document.getElementById('load-modal').classList.remove('flex');
+        document.getElementById('load-modal').classList.add('hidden');
+      };
+    
+</script>
 
 {% endblock  %}
