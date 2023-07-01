@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'dashboard',
+    'gps_tracking',
     'tailwind',
     'theme',
     'django_browser_reload',
