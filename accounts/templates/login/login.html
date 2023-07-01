@@ -4,25 +4,32 @@
 
 {% block content %}
 
-<main class="w-full min-h-screen max-w-[120rem] mx-auto flex flex-col items-center bg-cover bg-center" style="background-image: url({% static 'img/fondo.png' %});">
+<!-- <main class="w-full min-h-screen max-w-[120rem] mx-auto flex flex-col items-center bg-cover bg-center" style="background-image: url({% static 'img/fondo.png' %});"> -->
     <div class="w-full min-h-[calc(100vh-40px)] flex items-center justify-center pb-4 px-4 bg-gradient-to-b from-cyan-600/80 to-blue-800/80">
         <form action="" onsubmit="showSpinner()" class="text-center w-full sm:w-2/3 lg:w-96 rounded-lg shadow-xl pb-10 bg-white" method="POST" autocomplete="off" novalidate>  
             {% csrf_token %}                           
             <h1 class="uppercase tracking-wide text-lg text-white font-semibold rounded-t-lg py-2 px-4 bg-[#1C3C6D]">Iniciar Sesión</h1>
             <img class="mt-2 w-80 mx-auto object-contain" src="{% static 'img/LOGO-MAYNAS-02.png' %}" alt="MPM">
             <h6 class="text-gray-500 text-lg sm:text-sm">Por favor, ingrese sus credenciales</h6>        
-            <div>
-                <div class="flex flex-col items-start mt-6 px-4">
+            <div class="px-4">
+                <div class="opacity-0 w-full relative my-1 h-7">
+                    <div class="w-full text-left bg-red-100 border border-red-400 text-red-700 px-4 py-1 rounded absolute top-0 left-0">
+                        <strong class="font-bold"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="nu rw ayv w-4 pb-1 inline"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd"></path></svg></strong>
+                        <span class="inline">Something seriously bad happened.</span>                            
+                    </div>
+                </div>
+                <div class="flex flex-col items-start mt-2">
                     <label for="{{ form.username.id_for_label }}" class="text-left text-gray-500">Usuario</label>
                     {{ form.username }}                    
                 </div>
-                <div class="relative px-4 mt-6">
+                
+                <div class="relative mt-6">
                     <div class="flex items-center">
                         <div class="w-full flex flex-col items-start">
                             <label for="{{ form.password.id_for_label }}" class="text-left text-gray-500">Contraseña</label>
                             {{ form.password.as_widget }}                           
                         </div>
-                        <svg id="eye" class="absolute right-6 bottom-2 z-50 cursor-pointer fill-gray-400 hover:fill-gray-800  transition ease-in" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-eye-fill ml-2 text-gray-500 cursor-pointer hover:text-gray-700" viewBox="0 0 16 16">
+                        <svg id="eye" class="absolute right-3 bottom-2 z-50 cursor-pointer fill-gray-400 hover:fill-gray-800  transition ease-in" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-eye-fill ml-2 text-gray-500 cursor-pointer hover:text-gray-700" viewBox="0 0 16 16">
                             <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
                             <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
                         </svg>
@@ -37,11 +44,11 @@
         </form>
     </div>
 
-</main>
+<!-- </main> -->
 
-
-<div id="load-modal" class="hidden fixed z-[90] inset-0 items-center justify-center overflow-y-auto transition ease-in">
-    <div class="flex flex-col justify-center items-center bg-slate-800/50 w-32 rounded-lg aspect-square">
+{% endblock  %}
+<div id="load-modal" class="flex fixed z-[90] inset-0 items-center justify-center overflow-y-auto transition ease-in">
+    <div class="flex flex-col justify-center items-center bg-slate-800/50 w-32 h-32 rounded-lg">
         <svg class="animate-spin -ml-1 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -79,4 +86,3 @@
     
 </script>
 
-{% endblock  %}
