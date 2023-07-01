@@ -23,7 +23,9 @@ def login_view(request):
                 form.add_error(None, 'Credenciales inválidas')
 
         else:
-            return JsonResponse({'success': False, 'errorslog': form.errors})
+            # return JsonResponse({'success': False, 'errorslog': form.errors})
+            error_message = 'Credenciales inválidas'  # Mensaje de error personalizado
+            return render(request, 'login/login.html', {'form': form, 'error_message': error_message})
     else:
         form = LoginForm()
 
