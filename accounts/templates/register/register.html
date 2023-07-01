@@ -4,7 +4,7 @@
 
 {% block content %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-<main class="w-full min-h-screen max-w-[120rem] mx-auto flex flex-col bg-cover bg-center" style="background-image: url({% static 'img/fondo.png' %});">
+{% comment %} <main class="w-full min-h-screen max-w-[120rem] mx-auto flex flex-col bg-cover bg-center" style="background-image: url({% static 'img/fondo.png' %});"> {% endcomment %}
     <div id="steps" class="w-full min-h-[calc(100vh-40px)] items-start flex justify-center pb-4 px-4 bg-gradient-to-b from-sky-500/80 to-blue-800/80">
         <form id="step1" class="text-center w-full mt-10 mb-2 sm:w-2/3 lg:w-96 rounded-lg shadow-md pb-12 bg-white" method="POST" autocomplete="off" novalidate>                             
             {% csrf_token %} 
@@ -99,8 +99,8 @@
                 
         </form>
     </div>
-</main>
+    {% endblock  %}
+{% comment %} </main> {% endcomment %}
 <script src="{% static 'js/externo/jquery_3.6.3_jquery.min.js' %}"></script>
 <script src="{% static 'js/externo/toastr.min.js' %}"></script>
 <script src="{% static 'js/register/register.js' %}"></script>
-{% endblock  %}
