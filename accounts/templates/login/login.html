@@ -6,16 +6,16 @@
 
 <!-- <main class="w-full min-h-screen max-w-[120rem] mx-auto flex flex-col items-center bg-cover bg-center" style="background-image: url({% static 'img/fondo.png' %});"> -->
     <div class="w-full min-h-[calc(100vh-40px)] flex items-center justify-center pb-4 px-4 bg-gradient-to-b from-cyan-600/80 to-blue-800/80">
-        <form action="" onsubmit="showSpinner()" class="text-center w-full sm:w-2/3 lg:w-96 rounded-lg shadow-xl pb-10 bg-white" method="POST" autocomplete="off" novalidate>  
+        <form id="login-form" action="" onsubmit="showSpinner()" class="text-center w-full sm:w-2/3 lg:w-96 rounded-lg shadow-xl pb-10 bg-white" method="POST" autocomplete="off" novalidate>  
             {% csrf_token %}                           
             <h1 class="uppercase tracking-wide text-lg text-white font-semibold rounded-t-lg py-2 px-4 bg-[#1C3C6D]">Iniciar Sesión</h1>
             <img class="mt-2 w-80 mx-auto object-contain" src="{% static 'img/LOGO-MAYNAS-02.png' %}" alt="MPM">
             <h6 class="text-gray-500 text-lg sm:text-sm">Por favor, ingrese sus credenciales</h6>        
             <div class="px-4">
-                <div class="opacity-0 w-full relative my-1 h-7">
+                <div id="error-message" class="opacity-0 w-full relative my-1 h-7">
                     <div class="w-full text-left bg-red-100 border border-red-400 text-red-700 px-4 py-1 rounded absolute top-0 left-0">
                         <strong class="font-bold"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="nu rw ayv w-4 pb-1 inline"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd"></path></svg></strong>
-                        <span class="inline">Something seriously bad happened.</span>                            
+                        <span id="error-text" class="inline uppercase">Error: Bad Function.</span>                            
                     </div>
                 </div>
                 <div class="flex flex-col items-start mt-2">
@@ -46,8 +46,7 @@
 
 <!-- </main> -->
 
-{% endblock  %}
-<div id="load-modal" class="flex fixed z-[90] inset-0 items-center justify-center overflow-y-auto transition ease-in">
+<div id="load-modal" class="hidden fixed z-[90] inset-0 items-center justify-center overflow-y-auto transition ease-in">
     <div class="flex flex-col justify-center items-center bg-slate-800/50 w-32 h-32 rounded-lg">
         <svg class="animate-spin -ml-1 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -56,33 +55,7 @@
         <p class="text-white mt-2">CARGANDO...</p>
     </div>
 </div>
-
-<script>
-    const svg = document.getElementById("eye");
-    const passwordInput = document.getElementById("id_password");
-    let passwordVisible = false;
-
-    svg.addEventListener("click", function() {
-        if (passwordVisible) {
-            passwordInput.type = "password";
-            passwordVisible = false;
-            svg.style.fill = "";
-        } else {
-            passwordInput.type = "text";
-            passwordVisible = true;
-            svg.style.fill = "#1f2937";
-        }
-    });
-    function showSpinner() {
-        document.getElementById('load-modal').classList.remove('hidden');
-        document.getElementById('load-modal').classList.add('flex');
-
-      }
-  
-      window.onload = function() {
-        document.getElementById('load-modal').classList.remove('flex');
-        document.getElementById('load-modal').classList.add('hidden');
-      };
-    
-</script>
+<script src="{% static 'js/externo/jquery_3.6.3_jquery.min.js' %}"></script>
+<script src="{% static 'js/login/login.js' %}"></script>
+{% endblock  %}
 
