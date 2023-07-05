@@ -852,12 +852,12 @@ select {
   right: 0px;
 }
 
-.right-3 {
-  right: 0.75rem;
+.right-2 {
+  right: 0.5rem;
 }
 
-.right-6 {
-  right: 1.5rem;
+.right-3 {
+  right: 0.75rem;
 }
 
 .top-0 {
@@ -898,6 +898,10 @@ select {
   margin-left: -0.25rem;
 }
 
+.mb-1 {
+  margin-bottom: 0.25rem;
+}
+
 .mb-2 {
   margin-bottom: 0.5rem;
 }
@@ -914,12 +918,20 @@ select {
   margin-right: 0.5rem;
 }
 
+.mt-1 {
+  margin-top: 0.25rem;
+}
+
 .mt-10 {
   margin-top: 2.5rem;
 }
 
 .mt-2 {
   margin-top: 0.5rem;
+}
+
+.mt-4 {
+  margin-top: 1rem;
 }
 
 .mt-5 {
@@ -957,6 +969,7 @@ select {
 .\!ml-0 {
   margin-left: 0px !important;
 }
+
 
 .block {
   display: block;
@@ -1049,6 +1062,7 @@ select {
 .max-h-screen {
   max-height: 100vh;
 }
+
 
 .min-h-\[calc\(100vh-40px\)\] {
   min-height: calc(100vh - 40px);
@@ -1346,6 +1360,7 @@ select {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
+
 .bg-blue-500 {
   --tw-bg-opacity: 1;
   background-color: rgb(59 130 246 / var(--tw-bg-opacity));
@@ -1354,6 +1369,7 @@ select {
 .bg-slate-500 {
   --tw-bg-opacity: 1;
   background-color: rgb(100 116 139 / var(--tw-bg-opacity));
+
 }
 
 .bg-gradient-to-b {
@@ -1452,16 +1468,17 @@ select {
   padding-bottom: 2.5rem;
 }
 
-.pb-12 {
-  padding-bottom: 3rem;
-}
-
 .pb-4 {
   padding-bottom: 1rem;
 }
 
+
 .pl-52 {
   padding-left: 13rem;
+
+.pb-8 {
+  padding-bottom: 2rem;
+
 }
 
 .pr-5 {
@@ -1640,6 +1657,12 @@ select {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+.hover\:scale-105:hover {
+  --tw-scale-x: 1.05;
+  --tw-scale-y: 1.05;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
 @keyframes pulse {
   50% {
     opacity: .5;
@@ -1673,6 +1696,11 @@ select {
 .hover\:bg-green-700:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(21 128 61 / var(--tw-bg-opacity));
+}
+
+.hover\:bg-green-600:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(22 163 74 / var(--tw-bg-opacity));
 }
 
 .hover\:bg-slate-800\/80:hover {
@@ -1748,6 +1776,7 @@ select {
 }
 
 @media (min-width: 640px) {
+
   .sm\:right-10 {
     right: 2.5rem;
   }
@@ -1767,6 +1796,7 @@ select {
   .sm\:\!ml-52 {
     margin-left: 13rem !important;
   }
+
 
   .sm\:hidden {
     display: none;

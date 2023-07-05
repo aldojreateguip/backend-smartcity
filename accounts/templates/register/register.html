@@ -6,39 +6,66 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 {% comment %} <main class="w-full min-h-screen max-w-[120rem] mx-auto flex flex-col bg-cover bg-center" style="background-image: url({% static 'img/fondo.png' %});"> {% endcomment %}
     <div id="steps" class="w-full min-h-[calc(100vh-40px)] items-start flex justify-center pb-4 px-4 bg-gradient-to-b from-sky-500/80 to-blue-800/80">
-        <form id="step1" class="text-center w-full mt-10 mb-2 sm:w-2/3 lg:w-96 rounded-lg shadow-md pb-12 bg-white" method="POST" autocomplete="off" novalidate>                             
+        <form id="step1" class="text-center w-full mt-10 mb-2 sm:w-2/3 lg:w-96 rounded-lg shadow-md pb-8 bg-white" method="POST" autocomplete="off" novalidate>                             
             {% csrf_token %} 
             <h1 class="uppercase text-lg text-white font-bold rounded-t-lg p-4 bg-[#1C3C6D]">Registro</h1>
-            <div class="w-full flex items-center justify-center gap-x-2 mb-2 p-4">
+            <div class="w-full flex items-center justify-center gap-x-2 mb-1 px-4 py-2">
                 <div class="rounded-full py-2 px-4 bg-blue-800 text-white font-bold transition hover:animate-pulse">1</div>
                 <div class="text-gray-500 text-xl font-bold">&mdash;</div>
                 <div class="rounded-full py-2 px-4 bg-gray-500 text-white">2</div>
             </div>
             <h6 class="text-gray-500 text-lg sm:text-sm px-8 sm:px-4">Por favor, ingrese sus datos</h6>        
-            <div>
-                <div class="flex flex-col items-start sm:mt-6 mt-8 px-4 sm:px-8">
+            <div class="px-4 sm:px-8">
+                <div class="flex flex-col items-start mt-1">
                     <label for="" class="text-left text-gray-500">Nombre</label>
                     {{ form.pers_chnomper }} 
                     
                 </div>
-                <div class="flex flex-col items-start sm:mt-6 mt-8 px-4 sm:px-8">
+                <div id="error-nombre" class="opacity-0 w-full relative my-1 h-7">
+                    <div class="w-full text-left bg-red-100 border border-red-400 text-red-700 px-4 py-1 rounded absolute top-0 left-0">
+                        <strong class="font-bold"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="nu rw ayv w-4 pb-1 inline"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd"></path></svg></strong>
+                        <span id="error-text-nombre" class="inline uppercase text-sm">Error: Bad Function.</span>                            
+                    </div>
+                </div>
+
+                <div class="flex flex-col items-start mt-1">
                     <label for="" class="text-left text-gray-500">Apellidos</label>
                     {{ form.pers_chapeper}}
                     
                 </div>
-                <div class="flex flex-col items-start sm:mt-6 mt-8 px-4 sm:px-8">
+                <div id="error-apellido" class="opacity-0 w-full relative my-1 h-7">
+                    <div class="w-full text-left bg-red-100 border border-red-400 text-red-700 px-4 py-1 rounded absolute top-0 left-0">
+                        <strong class="font-bold"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="nu rw ayv w-4 pb-1 inline"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd"></path></svg></strong>
+                        <span id="error-text-apellido" class="inline uppercase text-sm">Error: Bad Function.</span>                            
+                    </div>
+                </div>
+
+                <div class="flex flex-col items-start mt-1">
                     <label for="" class="text-left text-gray-500">DNI</label>
                     {{ form.pers_chdocide}}
                     
                 </div>
-                <div class="flex flex-col items-start sm:mt-6 mt-8 px-4 sm:px-8">
+                <div id="error-dni" class="opacity-0 w-full relative my-1 h-7">
+                    <div class="w-full text-left bg-red-100 border border-red-400 text-red-700 px-4 py-1 rounded absolute top-0 left-0">
+                        <strong class="font-bold"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="nu rw ayv w-4 pb-1 inline"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd"></path></svg></strong>
+                        <span id="error-text-dni" class="inline uppercase text-sm">Error: Bad Function.</span>                            
+                    </div>
+                </div>
+
+                <div class="flex flex-col items-start mt-1">
                     <label for="" class="text-left text-gray-500">Correo</label>
                     {{ form.pers_chemaper}}                    
-                </div>                    
+                </div> 
+                <div id="error-correo" class="opacity-0 w-full relative my-1 h-7">
+                    <div class="w-full text-left bg-red-100 border border-red-400 text-red-700 px-4 py-1 rounded absolute top-0 left-0">
+                        <strong class="font-bold"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="nu rw ayv w-4 pb-1 inline"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd"></path></svg></strong>
+                        <span id="error-text-correo" class="inline uppercase text-sm">Error: Bad Function.</span>                            
+                    </div>
+                </div>                   
             </div>
             
             <div class="px-4 sm:px-8">
-                <button id="next-button" type="button" class="mt-9 w-full bg-[#1C3C6D] hover:bg-slate-800/80 text-white font-bold py-2 px-4 rounded-lg cursor-pointer transition ease-in focus:outline-none">
+                <button id="next-button" type="button" class="inline-flex items-center justify-center mt-4 w-full bg-[#1C3C6D] hover:bg-slate-800/80 text-white font-bold py-2 px-4 rounded-lg cursor-pointer transition ease-in focus:outline-none">
                     <svg id="spin1-registrarse" class="hidden animate-spin -ml-1 mr-2 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -48,47 +75,74 @@
             </div>                
         </form>
 
-        <form id="step2" action="" style="display:none;" class="text-center w-full mt-10 mb-2 sm:w-2/3 lg:w-96 rounded-lg shadow-md pb-12 bg-white" method="POST" autocomplete="off" novalidate>                             
+        <form id="step2" action="" style="display:none;" class="text-center w-full mt-10 mb-2 sm:w-2/3 lg:w-96 rounded-lg shadow-md pb-8 bg-white" method="POST" autocomplete="off" novalidate>                             
             {% csrf_token %}     
             <h1 class="uppercase text-lg text-white font-bold rounded-t-lg p-4 bg-[#1C3C6D]">Registro</h1>
-            <div class="w-full flex items-center justify-center gap-x-2 mb-2 p-4">
-                <div class="rounded-full py-2 px-4 bg-gray-500 text-white">1</div>
+            <div class="w-full flex items-center justify-center gap-x-2 mb-1 px-4 py-2">
+                <div class="rounded-full py-2 px-4 bg-green-500 text-white cursor-pointer transition ease-in hover:bg-green-600 hover:scale-105">1</div>
                 <div class="text-gray-500 text-xl font-bold">&mdash;</div>
                 <div class="rounded-full py-2 px-4 bg-blue-800 text-white font-bold">2</div>
             </div>
             <h6 class="text-gray-500 text-lg sm:text-sm px-8 sm:px-4">Por favor, ingrese sus datos</h6>        
-            <div>
-                <div class="flex flex-col items-start sm:mt-6 mt-8 px-4 sm:px-8">
+            <div class="px-4 sm:px-8">
+                <div class="flex flex-col items-start mt-1">
                     <label for="" class="text-left text-gray-500">Dirección</label>                        
                     {{form2.dire_chnomdir}}
                 </div>
-                <div class="flex flex-col items-start sm:mt-6 mt-8 px-4 sm:px-8">
+                <div id="error-direccion" class="opacity-0 w-full relative my-1 h-7">
+                    <div class="w-full text-left bg-red-100 border border-red-400 text-red-700 px-4 py-1 rounded absolute top-0 left-0">
+                        <strong class="font-bold"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="nu rw ayv w-4 pb-1 inline"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd"></path></svg></strong>
+                        <span id="error-text-direccion" class="inline uppercase text-sm">Error: Bad Function.</span>                            
+                    </div>
+                </div>
+
+                <div class="flex flex-col items-start mt-1">
                     <label for="" class="text-left text-gray-500">Celular</label>
                     {{form2.pers_chcelper}}  
                     
-                </div>                   
-                <div class="flex flex-col items-start sm:mt-6 mt-8 px-4 sm:px-8">
+                </div>   
+                <div id="error-celular" class="opacity-0 w-full relative my-1 h-7">
+                    <div class="w-full text-left bg-red-100 border border-red-400 text-red-700 px-4 py-1 rounded absolute top-0 left-0">
+                        <strong class="font-bold"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="nu rw ayv w-4 pb-1 inline"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd"></path></svg></strong>
+                        <span id="error-text-celular" class="inline uppercase text-sm">Error: Bad Function.</span>                            
+                    </div>
+                </div>    
+
+                <div class="flex flex-col items-start mt-1">
                     <label for="" class="text-left text-gray-500">Usuario</label>
                     {{form2.usua_chlogusu}}
                     
                 </div>
-                <div class="relative sm:mt-6 mt-8 px-4 sm:px-8">
+                <div id="error-usuario" class="opacity-0 w-full relative my-1 h-7">
+                    <div class="w-full text-left bg-red-100 border border-red-400 text-red-700 px-4 py-1 rounded absolute top-0 left-0">
+                        <strong class="font-bold"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="nu rw ayv w-4 pb-1 inline"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd"></path></svg></strong>
+                        <span id="error-text-usuario" class="inline uppercase text-sm">Error: Bad Function.</span>                            
+                    </div>
+                </div> 
+
+                <div class="relative mt-1">
                     <div class="flex items-center">
                         <div class="w-full flex flex-col items-start">
                             <label for="" class="text-left text-gray-500">Contraseña</label>
                             {{form2.usua_chpasusu}}                                
                         </div>
-                        <svg id="eye" class="absolute right-6 sm:right-10 bottom-2 z-50 cursor-pointer fill-gray-400 hover:fill-gray-800  transition ease-in" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-eye-fill ml-2 text-gray-500 cursor-pointer hover:text-gray-700" viewBox="0 0 16 16">
+                        <svg id="eye" class="absolute right-2 bottom-2 z-50 cursor-pointer fill-gray-400 hover:fill-gray-800  transition ease-in" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-eye-fill ml-2 text-gray-500 cursor-pointer hover:text-gray-700" viewBox="0 0 16 16">
                             <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
                             <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
                         </svg>
                     </div>
                 </div>
+                <div id="error-password" class="opacity-0 w-full relative my-1 h-7">
+                    <div class="w-full text-left bg-red-100 border border-red-400 text-red-700 px-4 py-1 rounded absolute top-0 left-0">
+                        <strong class="font-bold"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="nu rw ayv w-4 pb-1 inline"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd"></path></svg></strong>
+                        <span id="error-text-password" class="inline uppercase text-sm">Error: Bad Function.</span>                            
+                    </div>
+                </div> 
             </div>
             
             <div class="px-2 sm:px-4">
                     
-                <button id="enviar-btn" type="button" class="uppercase mt-9 w-full bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg cursor-pointer transition ease-in focus:outline-none">
+                <button id="enviar-btn" type="button" class="uppercase inline-flex items-center justify-center mt-4 w-full bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg cursor-pointer transition ease-in focus:outline-none">
                     <svg id="spin-registrarse" class="hidden animate-spin -ml-1 mr-2 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -99,8 +153,9 @@
                 
         </form>
     </div>
+    {% comment %} </main> {% endcomment %}
+    <script src="{% static 'js/externo/jquery_3.6.3_jquery.min.js' %}"></script>
+    <script src="{% static 'js/externo/toastr.min.js' %}"></script>
+    <script src="{% static 'js/register/register.js' %}"></script>
     {% endblock  %}
-{% comment %} </main> {% endcomment %}
-<script src="{% static 'js/externo/jquery_3.6.3_jquery.min.js' %}"></script>
-<script src="{% static 'js/externo/toastr.min.js' %}"></script>
-<script src="{% static 'js/register/register.js' %}"></script>
+    
