@@ -3,37 +3,27 @@
 {% block title %} Dashboard {% endblock title %}
 
 {% block content %}
-<style>
-    /* Estilos para el mapa */
-    #mapa {
-        width: 100% !important;
-        padding-left: 208px !important;
-        margin: auto !important;
-        padding-top: 5rem !important;
-    }
-    @media (max-width: 767px) {
-        #mapa {
-            margin-left: 0 !important;
-            width: 100% !important;
-            padding-left: 0 !important;
-        }
-    }
-</style>
+<link rel="stylesheet" type="text/css" href="{% static 'css/jquery.dataTables.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/dashboard.css' %}">
     <div id="mapa">
         {{ mapa|safe }}
     </div>
     <div class="sm:ml-52 ml-0 mt-4 mx-auto">
-        <table>
-            <th>
+        <table id="mytable" class="display">
+            <thead>
                 <tr>
-                    <td>
-hola
-                    </td>
+                    <th>Columna 1</th>
+                    <th>Columna 2</th>
+                    <th>Columna 3</th>
                 </tr>
-            </th>
-
-
+            </thead>
+            <tbody>
+            </tbody>
         </table>
     </div>
+
 {% endblock  %}
+{% block javascript %}
+    <script src="{% static 'js/externo/jquery.dataTables.min.js' %}"></script>
+{% endblock %}
 

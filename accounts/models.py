@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from django.contrib.auth.models import PermissionsMixin, BaseUserManager
 from django.contrib.auth.hashers import make_password,check_password as django_check_password
 # Create your models here.
 class MPers(models.Model):
@@ -21,6 +21,7 @@ class MUsua(models.Model):
     usua_chpasusu = models.CharField(db_column='USUA_chPASUSU', max_length=200, default='')  # Field name made lowercase.
     tipo_f_incodusu = models.IntegerField(db_column='TIPO_F_inCODUSU')  # Field name made lowercase.
     pers_f_incodper = models.IntegerField(db_column='PERS_F_inCODPER')  # Field name made lowercase.
+    is_active = models.BooleanField(db_column='USUA_IS_ACTIVE', default=True) 
 
     USERNAME_FIELD = 'usua_chlogusu'
     REQUIRED_FIELDS = ['usua_chpasusu']

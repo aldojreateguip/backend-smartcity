@@ -1,8 +1,8 @@
 from django.shortcuts import redirect, render
-from django.contrib.auth import login
+from django.contrib.auth import login, logout as django_logout
+from django.contrib.auth.models import AnonymousUser
 from .forms import LoginForm,MPersForm,MUsuaForm,Step1Form,Step2Form,SDireForm
 from .backends import MUsuaBackend
-from django.contrib.auth.backends import BaseBackend
 from django.http import JsonResponse
 
 def login_view(request):
@@ -28,6 +28,18 @@ def login_view(request):
 
     return render(request, 'login/login.html', {'form': form})
 
+def logout_view(request):
+    # Realiza aquí las acciones personalizadas de cierre de sesión
+    # Por ejemplo, puedes agregar registro de actividad, limpiar datos de la sesión personalizados, etc.
+    
+    # Llama a la función de cierre de sesión de Django
+    django_logout(request)
+    
+    # Restablece el usuario a AnonymousUser
+    request.user = AnonymousUser()
+    
+    # Redirige a la página de inicio de sesión u otra página de tu elección
+    return redirect('login')
 
 def register_view(request):
     if request.method == 'POST':
