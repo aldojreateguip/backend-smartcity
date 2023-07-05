@@ -1,6 +1,7 @@
 from django.urls import path
-from . import views
+from gps_tracking import views
 
 urlpatterns = [
-    
+    path('position/latest', views.obtener_ultimas_posiciones, name='get_position'),
+
 ]
