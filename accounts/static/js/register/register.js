@@ -77,16 +77,16 @@ $(document).ready(function () {
     const validarFormulario1 = (e) => {
         switch (e.attr("name")) {
             case "pers_chnomper":                
-                validarCampo(expresiones.nombre, e.val(), 'nombre', 'ingrese nombre válido');
+                validarCampo(expresiones.nombre, e.val(), 'nombre', 'Ingrese nombre válido');
                 break;
             case "pers_chapeper":                    
-                validarCampo(expresiones.apellido, e.val(), 'apellido', 'ingrese apellido válido');
+                validarCampo(expresiones.apellido, e.val(), 'apellido', 'Ingrese apellido válido');
                 break;
             case "pers_chdocide":
-                validarCampo(expresiones.dni, e.val(), 'dni', 'ingrese dni válido');
+                validarCampo(expresiones.dni, e.val(), 'dni', 'Ingrese dni válido');
                 break;
             case "pers_chemaper":
-                validarCampo(expresiones.correo, e.val(), 'correo', 'ingrese correo válido');
+                validarCampo(expresiones.correo, e.val(), 'correo', 'Ingrese correo válido');
                 break;
         }
     }
@@ -96,13 +96,13 @@ $(document).ready(function () {
                 validardireccion(e.val(), 'direccion');
                 break;
             case "pers_chcelper":                
-                validarCampo(expresiones.celular, e.val(), 'celular', 'ingrese número válido');
+                validarCampo(expresiones.celular, e.val(), 'celular', 'Ingrese número válido');
                 break;
             case "usua_chlogusu":
-                validarCampo(expresiones.usuario, e.val(), 'usuario', 'ingrese usuario válido');
+                validarCampo(expresiones.usuario, e.val(), 'usuario', 'Ingrese usuario válido');
                 break;
             case "usua_chpasusu":
-                validarCampo(expresiones.password, e.val(), 'password', 'min 6, use may. minús. y num.');
+                validarCampo(expresiones.password, e.val(), 'password', 'Ingrese mínimo 6 dígitos, una letra mayúscula y una letra minúscula');
                 // validarPassword2();
                 break;
             // case "password2":
@@ -126,11 +126,12 @@ $(document).ready(function () {
             campos[campo] = true;
         } else {
             campos[campo] = false;
-            $("#error-text-" + campo).text(msg);
-            $("#error-" + campo).removeClass("opacity-0");
-            setTimeout(function () {
-                $("#error-" + campo).addClass("opacity-0");
-            }, 4000);
+            toastr.error(msg);
+            // $("#error-text-" + campo).text(msg);
+            // $("#error-" + campo).removeClass("opacity-0");
+            // setTimeout(function () {
+            //     $("#error-" + campo).addClass("opacity-0");
+            // }, 4000);
         }
     }
 
