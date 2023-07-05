@@ -1054,14 +1054,6 @@ select {
   max-width: 120rem;
 }
 
-.flex-1 {
-  flex: 1 1 0%;
-}
-
-.flex-shrink-0 {
-  flex-shrink: 0;
-}
-
 .border-collapse {
   border-collapse: collapse;
 }
@@ -1307,6 +1299,10 @@ select {
 
 .p-4 {
   padding: 1rem;
+}
+
+.p-5 {
+  padding: 1.25rem;
 }
 
 .px-2 {
