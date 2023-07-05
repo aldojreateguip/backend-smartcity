@@ -3,3 +3,4 @@ mysqlclient
 python-dotenv
 django-tailwind
 django-browser-reload
+folium
