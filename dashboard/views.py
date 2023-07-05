@@ -14,8 +14,16 @@ def dashboard_view(request):
     # Crear el objeto de mapa centrado en la ubicación inicial
     mapa = folium.Map(location=[latitud, longitud], zoom_start=13, tiles='Stamen Terrain')
     
+    ruta_imagen = 'dashboard\static\img\camion.png'
+    
+    # Crear un icono personalizado con la imagen
+    icono_personalizado = folium.features.CustomIcon(
+        ruta_imagen,
+        icon_size=(80, 80)  # Ajusta el tamaño de la imagen según tus necesidades
+    )
+
     # Agregar un marcador en la ubicación inicial
-    folium.Marker([latitud, longitud], popup='Ubicación actual').add_to(mapa)
+    folium.Marker([latitud, longitud], popup='Ubicación actual',icon=icono_personalizado).add_to(mapa)
     
     # Renderizar el mapa en una plantilla HTML y devolverla como respuesta
     return render(request, 'dashboard/dashboard.html', {'mapa': mapa._repr_html_()})
