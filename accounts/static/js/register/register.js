@@ -15,6 +15,33 @@ $(document).ready(function () {
         }
     });
 
+    //****QUITAR LETRAS***
+    const numeroDNI = document.getElementById("id_pers_chdocide");
+    const numeroCel = document.getElementById("id_pers_chcelper");
+
+
+    numeroDNI.addEventListener("keypress", function(event) {
+      return soloNumeros(event, 8);
+    });
+    numeroCel.addEventListener("keypress", function(event) {
+      return soloNumeros(event, 9);
+    });
+    
+    function soloNumeros(event, maximo) {
+        const teclaPresionada = event.key;
+        const valorInput = event.target.value;
+      
+        if (
+          (teclaPresionada < "0" || teclaPresionada > "9") ||
+          valorInput.length >= maximo
+        ) {
+          event.preventDefault();
+          return false;
+        }
+    }  
+    
+    //***FIN QUITAR LETRAS */
+
     // *****VALIDACIONES DE LOS CAMPOS****
     // const formulario1 = document.getElementById('step1');
     // const inputs1 = document.querySelectorAll('#step1 input');
