@@ -9,23 +9,20 @@ def login_view(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
-            print('asassasa paso')
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
+            print(username)
+            print(password)
             user = MUsuaBackend().authenticate(request, username=username, password=password)
-            print(user)
+
             if user is not None:
                 user.backend = f"{MUsuaBackend.__module__}.{MUsuaBackend.__name__}"
                 login(request, user, backend=f"{MUsuaBackend.__module__}.{MUsuaBackend.__name__}")
                 return redirect('dashboard')  
             else:
-                print('error')
-                form.add_error(None, 'Credenciales inválidas')
-
+                return JsonResponse({'success': False, 'errorslog': 'Credenciales Incorrectas'})
         else:
-            # return JsonResponse({'success': False, 'errorslog': form.errors})
-            error_message = 'Credenciales inválidas'  # Mensaje de error personalizado
-            return render(request, 'login/login.html', {'form': form, 'error_message': error_message})
+            return JsonResponse({'success': False, 'errorslog': 'credenciales Incorrectas'})
     else:
         form = LoginForm()
 
