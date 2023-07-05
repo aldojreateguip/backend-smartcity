@@ -47,7 +47,7 @@ $(document).ready(function () {
 
         var formData = $(this).serialize();
         $.ajax({
-            url: '/login',
+            url: '/login/',
             type: 'POST',
             data: formData,
             success: function (response) {
@@ -61,7 +61,7 @@ $(document).ready(function () {
                         $('#error-message').addClass('opacity-0');
                     }, 2000);
                 } else {
-                    window.location.href = '/dashboard';
+                    window.location.assign('/dashboard');
                 }
             },
             error: function (xhr, error) {
