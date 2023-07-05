@@ -1,0 +1,13 @@
+#mapa {
+    width: 100% !important;
+    padding-left: 208px !important;
+    margin: auto !important;
+    padding-top: 5rem !important;
+}
+@media (max-width: 767px) {
+    #mapa {
+        margin-left: 0 !important;
+        width: 100% !important;
+        padding-left: 0 !important;
+    }
+}

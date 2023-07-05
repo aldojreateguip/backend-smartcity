@@ -15,4 +15,10 @@ $(document).ready(function() {
             $('#dropdown-user').addClass('hidden');
         }
     });
+
+    $('#mytable').DataTable({
+        //"processing": true,
+        //"serverSide": true,
+        // "ajax": "/datatable/"
+    });
 });

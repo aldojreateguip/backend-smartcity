@@ -4,3 +4,5 @@ python-dotenv
 django-tailwind
 django-browser-reload
 folium
+djangorestframework
+django-datatables-view
