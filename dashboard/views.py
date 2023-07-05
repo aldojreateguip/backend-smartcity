@@ -1,15 +1,20 @@
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import cache_control
-import folium
+import folium, asyncio
 from django_datatables_view.base_datatable_view import BaseDatatableView
 import requests
+from django.http import JsonResponse
+from gps_tracking.views import tracking
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @login_required(login_url="login")
 def dashboard_view(request):
-    latitud = -3.7549937  # Obtén la latitud en tiempo real
-    longitud = -73.2673102  # Obtén la longitud en tiempo real
+    data = asyncio.run(tracking(request))
+    latitud = data.get('latitude')
+    longitud = data.get('longitude')
+    # latitud = -3.7549937  # Obtén la latitud en tiempo real
+    # longitud = -73.2673102  # Obtén la longitud en tiempo real
     
     # Crear el objeto de mapa centrado en la ubicación inicial
     mapa = folium.Map(location=[latitud, longitud], zoom_start=13, tiles='Stamen Terrain')
@@ -19,7 +24,7 @@ def dashboard_view(request):
     
     # Renderizar el mapa en una plantilla HTML y devolverla como respuesta
     return render(request, 'dashboard/dashboard.html', {'mapa': mapa._repr_html_()})
-
+   
 class TuVistaDataTable(BaseDatatableView):
     def get_initial_queryset(self):
         # Aquí puedes realizar la solicitud a la API y obtener los datos

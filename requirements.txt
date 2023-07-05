@@ -6,3 +6,4 @@ django-browser-reload
 folium
 djangorestframework
 django-datatables-view
+websockets
