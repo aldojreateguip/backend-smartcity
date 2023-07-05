@@ -96,15 +96,15 @@ class Step2Form(forms.Form):
         widget=forms.TextInput(attrs={'class': 'w-full p-2 border-2 rounded-lg text-md border-gray-500 focus:ring-0 focus:border-2 focus:border-blue-500 focus:outline-none focus:placeholder-transparent'}),
     )
     dire_chnomdir = forms.CharField(
-        max_length=9,
+        max_length=100,
         widget=forms.TextInput(attrs={'class': 'w-full p-2 border-2 rounded-lg text-md border-gray-500 focus:ring-0 focus:border-2 focus:border-blue-500 focus:outline-none focus:placeholder-transparent'}),
     )
     usua_chlogusu = forms.CharField(
-        max_length=50,
+        max_length=20,
         widget=forms.TextInput(attrs={'class': 'w-full p-2 border-2 rounded-lg text-md border-gray-500 focus:ring-0 focus:border-2 focus:border-blue-500 focus:outline-none focus:placeholder-transparent'}),
     )
     usua_chpasusu = forms.CharField(
-        max_length=200,
+        max_length=50,
         widget=forms.PasswordInput(attrs={'class': 'w-full p-2 border-2 rounded-lg text-md border-gray-500 focus:ring-0 focus:border-2 focus:border-blue-500 focus:outline-none focus:placeholder-transparent'}),
     )
 
