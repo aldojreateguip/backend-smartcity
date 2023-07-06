@@ -134,7 +134,7 @@ def obtener_ultimas_posiciones(request):
 
 async def tracking(request):
     # Realizar la solicitud GET
-    url = 'http://104.237.9.196:8082/api/session'
+    url = 'http://demo4.traccar.org/api/session'
     
     queryParams = {
         'token': 'RzBFAiBV2antr--FQW-jTv0Q1Vo9F2zA89oRJI9B764qzNanfAIhAIV4Mi0ifZPwGDSxgx4YAIVsrWyL6fCFHsbpZ42lEZpJeyJ1IjoxNzY0OCwiZSI6IjIwMjMtMTItMzFUMDU6MDA6MDAuMDAwKzAwOjAwIn0'
@@ -161,8 +161,8 @@ async def tracking(request):
             while True:
                 message = await websocket.recv()
                 data = json.loads(message)
-                positions = data.get('positions', [])
 
+                positions = data.get('positions', [])
                 if positions:
                     position = positions[0]
                     latitude = position.get('latitude')
