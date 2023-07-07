@@ -11,56 +11,42 @@
         
         </div>
     </section>
-    <div class="sm:ml-52 ml-0 mt-4 mx-auto bg-white">
+    <div class="sm:ml-52 ml-0 mt-4 mx-auto bg-white/50">
         <table id="mytable" class="display">
             <thead>
                 <tr>
-                    <th>Columna 1</th>
-                    <th>Columna 2</th>
-                    <th>Columna 3</th>
+                    <th>N</th>
+                    <th>Placa</th>
+                    <th>Modelo</th>
+                    <th>Categoria</th>
+                    <th>Ultima Actualizacion</th>
+                    <th>Estado</th>
+                    <th>Ver</th>
                 </tr>
             </thead>
             <tbody>
+                {% for device in devices_data %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ device.placa }}</td>
+                    <td>{{ device.modelo }}</td>
+                    <td>
+                        {% if device.categoria == 'truck' %}
+                            Camión
+                        {% else %}
+                            {{ device.categoria }}
+                        {% endif %}
+                    </td>
+                    <td>{{ device.actualizado }}</td>
+                    <td>{{ device.estado }}</td>
+                    <td><a href="#">Ver</a></td>
+                </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
-
 </main>
-<div class="sm:ml-52 ml-0 mt-4 mx-auto bg-white/50">
-    <table id="mytable" class="display">
-        <thead>
-            <tr>
-                <th>N</th>
-                <th>Placa</th>
-                <th>Modelo</th>
-                <th>Categoria</th>
-                <th>Ultima Actualizacion</th>
-                <th>Estado</th>
-                <th>Ver</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for device in devices_data %}
-            <tr>
-                <td>{{ forloop.counter }}</td>
-                <td>{{ device.placa }}</td>
-                <td>{{ device.modelo }}</td>
-                <td>
-                    {% if device.categoria == 'truck' %}
-                        Camión
-                    {% else %}
-                        {{ device.categoria }}
-                    {% endif %}
-                </td>
-                <td>{{ device.actualizado }}</td>
-                <td>{{ device.estado }}</td>
-                <td><a href="#">Ver</a></td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
 
-</div>
 
 {% endblock %}
 {% block javascript %}
