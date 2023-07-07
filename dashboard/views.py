@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
@@ -11,11 +12,9 @@ from gps_tracking.views import tracking
 
 # Definir una variable global para almacenar las coordenadas
 coordenadas = {}
-marker = None
 # Función para ejecutar la captura de ubicación cada 30 segundos
 async def capture_location():
-    global coordenadas, marker
-
+    global coordenadas
     while True:
         # Ejecutar la función tracking para obtener las coordenadas
         data = await tracking(None)  # Esperar la ejecución de la función tracking
@@ -27,9 +26,6 @@ async def capture_location():
             'latitude': latitud,
             'longitude': longitud
         }
-        if marker is not None:
-            marker.location = [latitud, longitud]
-        # Esperar 30 segundos antes de la siguiente ejecución
         await asyncio.sleep(3)
 
 # Función para iniciar el bucle principal de asyncio y el hilo de captura de ubicación
@@ -43,7 +39,6 @@ capture_thread = threading.Thread(target=start_asyncio_loop)
 capture_thread.start()
 
 def get_mapmarker(request):
-    global marker
     latitud = coordenadas.get('latitude')
     longitud = coordenadas.get('longitude')
     return JsonResponse({'latitud': latitud, 'longitud': longitud})
@@ -52,30 +47,18 @@ def get_mapmarker(request):
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @login_required(login_url="login")
 def dashboard_view(request):
-    global marker
-    # data = asyncio.run(tracking(request))
     latitud = coordenadas.get('latitude')
     longitud = coordenadas.get('longitude')
 
-    if marker is None:
-        # Crear el marcador inicial con un identificador único
-        marker = folium.Marker([latitud, longitud], popup='Ubicación actual')
-
-    # Agregar un marcador en la ubicación inicial
-    marker = folium.Marker([latitud, longitud], popup='Ubicación actual')
-    ruta_imagen = 'dashboard\static\img\camion.png'
-    
-    # Crear un icono personalizado con la imagen
-    icono_personalizado = folium.features.CustomIcon(
-        ruta_imagen,
-        icon_size=(80, 80)  # Ajusta el tamaño de la imagen según tus necesidades
-    )
-    mapa = folium.Map(location=[latitud, longitud],icon=icono_personalizado, zoom_start=13, tiles='OpenStreetMap')
-    marker.add_to(mapa)
+    device_url = 'http://127.0.0.1:8000/devices/'
+    headers = {'Authorization': settings.API_KEY_SSMC}
+    data = []
+    devices = requests.post(device_url, headers=headers)
+    if devices.status_code == 200:
+        data = devices.json()
 
     # Renderizar el mapa en una plantilla HTML y devolverla como respuesta
-    return render(request, 'dashboard/dashboard.html', {'mapa': mapa._repr_html_(), 'latitud': latitud, 'longitud': longitud})
-
+    return render(request, 'dashboard/dashboard.html', {'latitud': latitud, 'longitud': longitud, 'devices_data':data['dispositivo']})
 
 
 class TuVistaDataTable(BaseDatatableView):
