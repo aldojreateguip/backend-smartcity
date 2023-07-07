@@ -876,6 +876,10 @@ select {
   z-index: 90;
 }
 
+.z-\[9999\] {
+  z-index: 9999;
+}
+
 .float-right {
   float: right;
 }
@@ -1002,10 +1006,6 @@ select {
   height: 1.75rem;
 }
 
-.h-\[37\.5rem\] {
-  height: 37.5rem;
-}
-
 .h-full {
   height: 100%;
 }
@@ -1014,16 +1014,16 @@ select {
   height: 100vh;
 }
 
+.min-h-\[20rem\] {
+  min-height: 20rem;
+}
+
 .min-h-\[calc\(100vh-40px\)\] {
   min-height: calc(100vh - 40px);
 }
 
 .min-h-screen {
   min-height: 100vh;
-}
-
-.min-h-\[20rem\] {
-  min-height: 20rem;
 }
 
 .w-32 {
@@ -1083,10 +1083,6 @@ select {
 
 .list-none {
   list-style-type: none;
-}
-
-.flex-row {
-  flex-direction: row;
 }
 
 .flex-col {
@@ -1248,10 +1244,6 @@ select {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
-.bg-white\/50 {
-  background-color: rgb(255 255 255 / 0.5);
-}
-
 .bg-gradient-to-b {
   background-image: linear-gradient(to bottom, var(--tw-gradient-stops));
 }
@@ -1265,12 +1257,6 @@ select {
 .from-sky-500\/80 {
   --tw-gradient-from: rgb(14 165 233 / 0.8) var(--tw-gradient-from-position);
   --tw-gradient-to: rgb(14 165 233 / 0) var(--tw-gradient-to-position);
-  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
-}
-
-.from-white\/0 {
-  --tw-gradient-from: rgb(255 255 255 / 0) var(--tw-gradient-from-position);
-  --tw-gradient-to: rgb(255 255 255 / 0) var(--tw-gradient-to-position);
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
 
@@ -1681,6 +1667,25 @@ select {
     justify-content: space-between;
   }
 
+  .sm\:bg-slate-900 {
+    --tw-bg-opacity: 1;
+    background-color: rgb(15 23 42 / var(--tw-bg-opacity));
+  }
+
+  .sm\:bg-gradient-to-b {
+    background-image: linear-gradient(to bottom, var(--tw-gradient-stops));
+  }
+
+  .sm\:from-white\/80 {
+    --tw-gradient-from: rgb(255 255 255 / 0.8) var(--tw-gradient-from-position);
+    --tw-gradient-to: rgb(255 255 255 / 0) var(--tw-gradient-to-position);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+  }
+
+  .sm\:to-blue-800\/80 {
+    --tw-gradient-to: rgb(30 64 175 / 0.8) var(--tw-gradient-to-position);
+  }
+
   .sm\:px-4 {
     padding-left: 1rem;
     padding-right: 1rem;
@@ -1689,10 +1694,6 @@ select {
   .sm\:px-8 {
     padding-left: 2rem;
     padding-right: 2rem;
-  }
-
-  .sm\:pl-52 {
-    padding-left: 13rem;
   }
 
   .sm\:text-2xl {
