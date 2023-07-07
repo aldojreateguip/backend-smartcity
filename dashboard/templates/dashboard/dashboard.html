@@ -38,6 +38,13 @@
     L.tileLayer(urlOpenLayers, {
          maxZoom: 19,
     }).addTo(myMap)
+
+    
+const iconMarker = L.icon({
+    iconUrl: '../static/img/camion.png',
+    iconSize: [60, 60],
+    iconAnchor: [30, 60]
+  })
     
     function actualizarUbicacionMarcador() {
         $.ajax({
@@ -51,7 +58,9 @@
                     myMap.removeLayer(marker)
                 }
                 console.log(latitude, longitude)
-                marker = L.marker([latitude, longitude]).addTo(myMap)
+                marker = L.marker([latitude, longitude], {
+                    icon: iconMarker
+                  }).addTo(myMap)
                 setTimeout(actualizarUbicacionMarcador, 3000)
             },
             error: function (error) {
