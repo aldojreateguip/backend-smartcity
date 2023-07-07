@@ -5,6 +5,8 @@ import requests, json
 import websockets
 from django.conf import settings
 import urllib.parse
+import datetime
+import pytz
 
 @api_view(['POST'])
 def get_devices(request):
@@ -32,14 +34,20 @@ def get_devices(request):
                     placa = device.get('name')
                     modelo = device.get('model')
                     categoria = device.get('category')
-                    actualizado = device.get('lastUpdate')
+                    fecha_hora_utc = device.get('lastUpdate')
                     estado = device.get('status')
+                    
+                    preactualizado = datetime.datetime.strptime(fecha_hora_utc,'%Y-%m-%dT%H:%M:%S.%f%z')
+                    zona_horaria = pytz.timezone('America/Lima')
+                    fecha_hora_ajustada = preactualizado.astimezone(zona_horaria)
+                    actualizado = fecha_hora_ajustada.strftime('%Y-%m-%d %H:%M:%S')
+
 
                     devices.append({
                         'id': id, 
                         'placa': placa,
                         'modelo': modelo, 
-                        'caterogia': categoria,
+                        'categoria': categoria,
                         "actualizado": actualizado,
                         'estado': estado
                     })

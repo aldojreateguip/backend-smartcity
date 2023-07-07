@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
@@ -48,8 +49,16 @@ def get_mapmarker(request):
 def dashboard_view(request):
     latitud = coordenadas.get('latitude')
     longitud = coordenadas.get('longitude')
+
+    device_url = 'http://127.0.0.1:8000/devices/'
+    headers = {'Authorization': settings.API_KEY_SSMC}
+    data = []
+    devices = requests.post(device_url, headers=headers)
+    if devices.status_code == 200:
+        data = devices.json()
+
     # Renderizar el mapa en una plantilla HTML y devolverla como respuesta
-    return render(request, 'dashboard/dashboard.html', {'latitud': latitud, 'longitud': longitud})
+    return render(request, 'dashboard/dashboard.html', {'latitud': latitud, 'longitud': longitud, 'devices_data':data['dispositivo']})
 
 
 class TuVistaDataTable(BaseDatatableView):
