@@ -32,7 +32,10 @@ ALLOWED_HOSTS = ['*']
 AUTH_USER_MODEL = 'accounts.MUsua'
 API_USR_TRACCAR = 'onichan69@gmail.com'
 API_PSS_TRACCAR = 'oniChan69.'
+API_USRID_TRACCAR = '17648'
 API_KEY_SSMC = 'Bearer RjBEAiA0Pxqr5RlloxZ34CfL23KA7BVyzCpG_AZhqQg_KmSf2QIgEjOSOOJ8nHPIUZmQZcpk1vddhsOUmBcGSUTkRVwMkvB7InUiOjE3NjQ4LCJlIjoiMjAyMy0wNy0xMVQwNTowMDowMC4wMDArMDA6MDAifQ'
+
+
 # Application definition
 
 INSTALLED_APPS = [
