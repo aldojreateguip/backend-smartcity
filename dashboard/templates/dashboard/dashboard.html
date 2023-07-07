@@ -27,69 +27,16 @@
 {% endblock %}
 {% block javascript %}
 <script src="{% static 'js/externo/jquery.dataTables.min.js' %}"></script>
-<!-- <script>
-    // Obtener el elemento HTML que representa el mapa
-    var mapa = L.map('mapa').setView([0, 0], 13);
-
-    // Crear el objeto del marcador
-    var marker = L.marker([0, 0]);
-
-    // Función para actualizar la ubicación del marcador en el mapa
-    function actualizarMarcador(latitude, longitude) {
-        marker.setLatLng([latitude, longitude]);
-    }
-
-    // Función para recibir y procesar las nuevas coordenadas
-    function recibirCoordenadas(latitude, longitude) {
-        // Actualizar la ubicación del marcador
-        actualizarMarcador(latitude, longitude);
-    }
-
-    // Agregar el marcador al mapa
-    marker.addTo(mapa);
-
-    // Suscribirse a un canal para recibir las coordenadas actualizadas
-    var socket = new WebSocket("ws://104.237.9.196:8082/api/socket");
-
-    socket.onmessage = function(event) {
-        // Recibir las nuevas coordenadas desde Django
-        var data = JSON.parse(event.data);
-        var latitude = data.latitude;
-        var longitude = data.longitude;
-
-        // Procesar las nuevas coordenadas
-        recibirCoordenadas(latitude, longitude);
-    };
-</script> -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
 <script>
     let marker = null;
-
-    // Función para actualizar la ubicación del marcador en el mapa
-    // function actualizarMarcador(latitude, longitude) {
-    //     if (marker) {
-    //         console.log('actualizado');
-    //         console.log(longitude, latitude);
-    //         // Actualizar las coordenadas del marcador existente
-    //         marker.setLatLng([latitude, longitude]);
-
-    //     } else {
-    //         // Obtener el mapa existente
-    //         var mapa = L.map('mapa');
-
-    //         // Crear el marcador y agregarlo al mapa
-    //         marker = L.marker([latitude, longitude]).addTo(mapa);
-    //     }
-    // }
-    // var isMarkerAdded = false;
-    // Función para hacer la solicitud AJAX y actualizar el marcador
     let myMap = L.map('mapa').setView([-3.746241, -73.2478283], 13)
 
     const urlOpenLayers = 'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'
     L.tileLayer(urlOpenLayers, {
-         maxZoom: 15,
+         maxZoom: 19,
     }).addTo(myMap)
     
     function actualizarUbicacionMarcador() {
@@ -106,15 +53,6 @@
                 console.log(latitude, longitude)
                 marker = L.marker([latitude, longitude]).addTo(myMap)
                 setTimeout(actualizarUbicacionMarcador, 3000)
-                // actualizarMarcador(latitude, longitude);
-
-                // Agregar el marcador al mapa si no está agregado
-                // if (!isMarkerAdded) {
-                //     console.log('se añade');
-                //     var mapa = document.getElementById("mapa");
-                //     marker.addTo(mapa);
-                //     isMarkerAdded = true;
-                // }
             },
             error: function (error) {
                 console.log('Error al obtener la ubicación del marcador:', error);
@@ -124,9 +62,5 @@
 
     // Ejecutar la función inicialmente
     actualizarUbicacionMarcador();
-
-
-    // Ejecutar la función cada 3 segundos
-    // setInterval(actualizarUbicacionMarcador, 3000);
 </script>
 {% endblock %}
