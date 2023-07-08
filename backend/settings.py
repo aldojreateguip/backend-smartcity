@@ -162,8 +162,15 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
-
+#local
 STATIC_URL = 'static/'
+
+#Produccion
+# STATIC_URL = 'static/'
+# MEDIA_URL = "media/"
+
+# STATIC_ROOT = "/home/munimaynas/ssmc.munimaynas.gob.pe/static"
+# MEDIA_ROOT = "/home/munimaynas/ssmc.munimaynas.gob.pe/media"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
