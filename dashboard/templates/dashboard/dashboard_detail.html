@@ -1,0 +1,78 @@
+{% extends 'core-dashboard/base.html' %}
+{% load static %}
+{% block title %} Detalle de Compactadoras {% endblock title %}
+
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/jquery.dataTables.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/dashboard.css' %}">
+<div class="w-full min-h-screen px-4 pb-4 bg-blue-800/80 sm:bg-gradient-to-b sm:from-white/80 sm:to-blue-800/80">
+    <section class="sm:ml-52 pt-4">
+        <div id="mapa" class="w-full min-h-[20rem] sm:min-h-[37.5rem]">
+        
+        </div>
+    </section>
+    <div class="sm:ml-52 ml-0 mt-4 mx-auto p-2 overflow-x-auto bg-white/50">
+        <table id="dt_detail" class="display">
+            <thead>
+                <tr>
+                    <th>N°</th>
+                    <th>Fecha de Registro</th>
+                    <th>Latitud y Longitud</th>
+                    <th>Velocidad</th>
+                    <th>Distancia con el Punto Anterior</th>
+                    <th>Tiempo Detenido</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for data in dashboard_detail %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ data.fecha }}</td>
+                    <td>({{ data.latitud }}, {{ data.longitud }})</td>
+                    <td>{{ data.velocidad }}</td>
+                    <td>{{ data.distancia }}</td>
+                    <td>{{ data.tiempoDetenido }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</main>
+
+
+{% endblock %}
+{% block javascript %}
+<script src="{% static 'js/externo/jquery.dataTables.min.js' %}"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+<script>
+    let marker = null;
+    let rutaCoords = [];
+    let myMap = L.map('mapa').setView([-3.746241, -73.2478283], 13)
+
+    const urlOpenLayers = 'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'
+    L.tileLayer(urlOpenLayers, {
+        maxZoom: 19,
+    }).addTo(myMap)
+
+    
+    const iconMarker = L.icon({
+        iconUrl: '/static/img/camion-2.png',
+        iconSize: [60, 30],
+        iconAnchor: [30, 60]
+    })
+    
+    {% for data in dashboard_detail %}
+        {% if data.latitud != 0.0 and data.longitud != 0.0 %}
+            rutaCoords.push([{{ data.latitud }}, {{ data.longitud }}]);
+        {% endif %}
+    {% endfor %}
+    // Crear la polilínea
+    let polyline = L.polyline(rutaCoords, { color: 'red' }).addTo(myMap);
+
+    // Ajustar el mapa para que se ajuste a la ruta
+    myMap.fitBounds(polyline.getBounds());
+
+</script>
+{% endblock %}
