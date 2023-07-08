@@ -1,12 +1,12 @@
 from django.conf import settings
 from django.http import JsonResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import cache_control
 from django_datatables_view.base_datatable_view import BaseDatatableView
 import requests
-from gps_tracking.views import tracking
-from rest_framework.decorators import api_view
+import json
+from gps_tracking.views import tracking, get_history_gps
 
 
 def get_mapmarker(request):
@@ -32,6 +32,14 @@ def dashboard_view(request):
 
     # Renderizar el mapa en una plantilla HTML y devolverla como respuesta
     return render(request, 'dashboard/dashboard.html', {'latitud': latitud, 'longitud': longitud, 'devices_data':data['dispositivo']})
+
+
+def dashboard_detail(request, device_id):
+    historial_response = get_history_gps(device_id)
+    historial_content = historial_response.content.decode('utf-8')  # Decodificar el contenido en UTF-8
+    historial_data = json.loads(historial_content)  # Cargar el contenido en un objeto JSON
+    registros = historial_data["registros"]
+    return render(request, 'dashboard/dashboard_detail.html', {'dashboard_detail':registros})
 
 
 class TuVistaDataTable(BaseDatatableView):
