@@ -7,3 +7,4 @@ folium
 djangorestframework
 django-datatables-view
 websockets
+geopy
