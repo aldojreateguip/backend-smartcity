@@ -12,7 +12,7 @@
         </div>
     </section>
     <div class="sm:ml-52 ml-0 mt-4 mx-auto bg-white/50">
-        <table id="mytable" class="display">
+        <table id="dt_devices" class="display">
             <thead>
                 <tr>
                     <th>N</th>
@@ -39,7 +39,7 @@
                     </td>
                     <td>{{ device.actualizado }}</td>
                     <td>{{ device.estado }}</td>
-                    <td><a href="#">Ver</a></td>
+                    <td><a href="{% url 'dashboard_detail' device.id %}">Ver</a></td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -65,7 +65,7 @@
 
     
 const iconMarker = L.icon({
-    iconUrl: '../static/img/camion-2.png',
+    iconUrl: '/static/img/camion-2.png',
     iconSize: [60, 30],
     iconAnchor: [30, 60]
   })

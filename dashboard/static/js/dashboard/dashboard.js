@@ -15,8 +15,13 @@ $(document).ready(function() {
             $('#dropdown-user').addClass('hidden');
         }
     });
-
-    $('#mytable').DataTable({
+    
+    $('#dt_devices').DataTable({
+        //"processing": true,
+        //"serverSide": true,
+        // "ajax": "/datatable/"
+    });
+    $('#dt_detail').DataTable({
         //"processing": true,
         //"serverSide": true,
         // "ajax": "/datatable/"
