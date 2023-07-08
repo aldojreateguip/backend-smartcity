@@ -3,8 +3,6 @@ from gps_tracking import views
 
 
 urlpatterns = [
-    path('devices/', views.get_devices, name='get_position'),
-    path('tracking', views.tracking, name='on_tracking')
-
-
+    path('devices/', views.get_devices, name='devices'),
+    path('history/', views.get_history_gps, name='history'),
 ]

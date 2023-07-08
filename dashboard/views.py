@@ -3,42 +3,14 @@ from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import cache_control
-import folium, asyncio
 from django_datatables_view.base_datatable_view import BaseDatatableView
 import requests
-import threading
 from gps_tracking.views import tracking
+from rest_framework.decorators import api_view
 
-
-# Definir una variable global para almacenar las coordenadas
-coordenadas = {}
-# Función para ejecutar la captura de ubicación cada 30 segundos
-async def capture_location():
-    global coordenadas
-    while True:
-        # Ejecutar la función tracking para obtener las coordenadas
-        data = await tracking(None)  # Esperar la ejecución de la función tracking
-        latitud = data.get('latitude')
-        longitud = data.get('longitude')
-
-        # Actualizar las coordenadas globales
-        coordenadas = {
-            'latitude': latitud,
-            'longitude': longitud
-        }
-        await asyncio.sleep(3)
-
-# Función para iniciar el bucle principal de asyncio y el hilo de captura de ubicación
-def start_asyncio_loop():
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    loop.run_until_complete(capture_location())
-
-# Iniciar el hilo de captura de ubicación en segundo plano
-capture_thread = threading.Thread(target=start_asyncio_loop)
-capture_thread.start()
 
 def get_mapmarker(request):
+    coordenadas = tracking(request)  # Esperar la ejecución de la función tracking
     latitud = coordenadas.get('latitude')
     longitud = coordenadas.get('longitude')
     return JsonResponse({'latitud': latitud, 'longitud': longitud})
@@ -47,10 +19,11 @@ def get_mapmarker(request):
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @login_required(login_url="login")
 def dashboard_view(request):
+    coordenadas = tracking(request)  # Esperar la ejecución de la función tracking
     latitud = coordenadas.get('latitude')
     longitud = coordenadas.get('longitude')
 
-    device_url = 'http://127.0.0.1:8000/devices/'
+    device_url = settings.API_URL_BASE + '/devices/'
     headers = {'Authorization': settings.API_KEY_SSMC}
     data = []
     devices = requests.post(device_url, headers=headers)
@@ -63,8 +36,7 @@ def dashboard_view(request):
 
 class TuVistaDataTable(BaseDatatableView):
     def get_initial_queryset(self):
-        # Aquí puedes realizar la solicitud a la API y obtener los datos
-        url = 'https://demo4.traccar.org/api/positions'
+        url = settings.TRACCAR_URL_BASE + '/api/positions'
         response = requests.get(url)
         if response.status_code == 200:
             data = response.json()
