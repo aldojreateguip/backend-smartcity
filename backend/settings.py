@@ -30,18 +30,18 @@ DEBUG = os.getenv('DEBUG') == 'True'
 ALLOWED_HOSTS = ['*']
 
 AUTH_USER_MODEL = 'accounts.MUsua'
-API_USR_TRACCAR = 'onichan69@gmail.com'
-API_PSS_TRACCAR = 'oniChan69.'
+API_USR_TRACCAR = 'ierrakato98@gmail.com'
+API_PSS_TRACCAR = '159357852Aj.'
 API_USRID_TRACCAR = '17648'
-API_KEY_SSMC = 'Bearer RjBEAiA0Pxqr5RlloxZ34CfL23KA7BVyzCpG_AZhqQg_KmSf2QIgEjOSOOJ8nHPIUZmQZcpk1vddhsOUmBcGSUTkRVwMkvB7InUiOjE3NjQ4LCJlIjoiMjAyMy0wNy0xMVQwNTowMDowMC4wMDArMDA6MDAifQ'
-API_TOKEN = 'RjBEAiA0Pxqr5RlloxZ34CfL23KA7BVyzCpG_AZhqQg_KmSf2QIgEjOSOOJ8nHPIUZmQZcpk1vddhsOUmBcGSUTkRVwMkvB7InUiOjE3NjQ4LCJlIjoiMjAyMy0wNy0xMVQwNTowMDowMC4wMDArMDA6MDAifQ'
+API_KEY_SSMC = 'Bearer RjBEAiAacXPFcldc_mEzCMw2iFs7VvxBw1ta59jm34FgCuQ7FAIgV6WF5N_Cjg49lCfhkFXFqkt7P3e-lcS_M7i_KDS3yHJ7InUiOjE3NjQ4LCJlIjoiMjAyNS0wNy0yOFQwNTowMDowMC4wMDArMDA6MDAifQ'
+API_TOKEN = 'RjBEAiAacXPFcldc_mEzCMw2iFs7VvxBw1ta59jm34FgCuQ7FAIgV6WF5N_Cjg49lCfhkFXFqkt7P3e-lcS_M7i_KDS3yHJ7InUiOjE3NjQ4LCJlIjoiMjAyNS0wNy0yOFQwNTowMDowMC4wMDArMDA6MDAifQ'
 #produccion
 # API_URL_BASE = 'https://ssmc.munimaynas.gob.pe'
 # TRACCAR_URL_BASE = ''
 
 #desarrollo
 API_URL_BASE = 'http://127.0.0.1:8000'
-TRACCAR_URL_BASE = 'https://demo4.traccar.org'
+TRACCAR_URL_BASE = 'https://demo2.traccar.org'
 # Application definition
 
 INSTALLED_APPS = [

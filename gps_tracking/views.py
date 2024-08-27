@@ -11,50 +11,106 @@ from geopy.distance import geodesic
 
 
 @api_view(['POST'])
+# def get_devices(request):
+#     try:
+#         # Obtener el token del usuario autenticado
+#         token = request.META.get('HTTP_AUTHORIZATION')
+
+#         if(token == settings.API_KEY_SSMC):
+#             url = settings.TRACCAR_URL_BASE + '/api/devices'
+            
+#             # Realizar la solicitud GET a la API de Traccar con los parámetros
+#             params = {
+#                 'all': True,
+#             }
+#             # response = requests.get(url, params=params, headers=headers)
+#             response = requests.get(url, params=params, auth=(settings.API_USR_TRACCAR, settings.API_PSS_TRACCAR))
+#             if response.status_code == 200:
+#                 # Procesar la respuesta de la API de Traccar
+#                 devices_data = response.json()
+                
+#                 # Obtener las posiciones de la respuesta y almacenarlas en la lista "posiciones"
+#                 devices = []
+#                 for device in devices_data:
+#                     id = device.get('id',' ')
+#                     placa = device.get('name',' ')
+#                     modelo = device.get('model',' ')
+#                     categoria = device.get('category',' ')
+#                     fecha_hora_utc = device.get('lastUpdate',' ')
+#                     estado = device.get('status',' ')
+#                     print('datos capturados')
+#                     preactualizado = datetime.datetime.strptime(fecha_hora_utc,'%Y-%m-%dT%H:%M:%S.%f%z')
+#                     zona_horaria = pytz.timezone('America/Lima')
+#                     fecha_hora_ajustada = preactualizado.astimezone(zona_horaria)
+#                     actualizado = fecha_hora_ajustada.strftime('%Y-%m-%d %H:%M:%S')
+#                     print('fecha convertida')
+
+
+#                     devices.append({
+#                         'id': id, 
+#                         'placa': placa,
+#                         'modelo': modelo, 
+#                         'categoria': categoria,
+#                         "actualizado": actualizado,
+#                         'estado': estado
+#                     })
+#                 print('datos formateados')
+#                 # Resto del código...
+#                 return JsonResponse({'dispositivo': devices})
+#             else:
+#                 return JsonResponse({'error': 'Error al obtener las posiciones de Traccar'}, status=response.status_code)
+#         else:
+#             return JsonResponse({'error': 'No está autorizado para acceder a esta información'}, status=401)
+#     except Exception as e:
+#         # Capturar errores no controlados y enviar un mensaje de error
+#         return JsonResponse({'error': str(e)})
 def get_devices(request):
     try:
         # Obtener el token del usuario autenticado
         token = request.META.get('HTTP_AUTHORIZATION')
 
-        if(token == settings.API_KEY_SSMC):
+        if token == settings.API_KEY_SSMC:
             url = settings.TRACCAR_URL_BASE + '/api/devices'
             
             # Realizar la solicitud GET a la API de Traccar con los parámetros
             params = {
                 'all': True,
             }
-            # response = requests.get(url, params=params, headers=headers)
             response = requests.get(url, params=params, auth=(settings.API_USR_TRACCAR, settings.API_PSS_TRACCAR))
             if response.status_code == 200:
                 # Procesar la respuesta de la API de Traccar
                 devices_data = response.json()
                 
-                # Obtener las posiciones de la respuesta y almacenarlas en la lista "posiciones"
+                # Obtener las posiciones de la respuesta y almacenarlas en la lista "devices"
                 devices = []
                 for device in devices_data:
-                    id = device.get('id')
-                    placa = device.get('name')
-                    modelo = device.get('model')
-                    categoria = device.get('category')
-                    fecha_hora_utc = device.get('lastUpdate')
-                    estado = device.get('status')
+                    id = device.get('id', "")
+                    placa = device.get('name', "")
+                    modelo = device.get('model', "")
+                    categoria = device.get('category', "")
+                    fecha_hora_utc = device.get('lastUpdate', "")
+                    estado = device.get('status', "")
                     
-                    preactualizado = datetime.datetime.strptime(fecha_hora_utc,'%Y-%m-%dT%H:%M:%S.%f%z')
-                    zona_horaria = pytz.timezone('America/Lima')
-                    fecha_hora_ajustada = preactualizado.astimezone(zona_horaria)
-                    actualizado = fecha_hora_ajustada.strftime('%Y-%m-%d %H:%M:%S')
-
+                    if isinstance(fecha_hora_utc, str) and fecha_hora_utc:
+                        try:
+                            preactualizado = datetime.datetime.strptime(fecha_hora_utc, '%Y-%m-%dT%H:%M:%S.%f%z')
+                            zona_horaria = pytz.timezone('America/Lima')
+                            fecha_hora_ajustada = preactualizado.astimezone(zona_horaria)
+                            actualizado = fecha_hora_ajustada.strftime('%Y-%m-%d %H:%M:%S')
+                        except ValueError:
+                            actualizado = ""
+                    else:
+                        actualizado = ""
 
                     devices.append({
                         'id': id, 
                         'placa': placa,
                         'modelo': modelo, 
                         'categoria': categoria,
-                        "actualizado": actualizado,
+                        'actualizado': actualizado,
                         'estado': estado
                     })
                 
-                # Resto del código...
                 return JsonResponse({'dispositivo': devices})
             else:
                 return JsonResponse({'error': 'Error al obtener las posiciones de Traccar'}, status=response.status_code)
