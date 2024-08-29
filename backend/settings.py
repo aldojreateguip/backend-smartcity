@@ -40,7 +40,7 @@ API_TOKEN = 'RjBEAiAacXPFcldc_mEzCMw2iFs7VvxBw1ta59jm34FgCuQ7FAIgV6WF5N_Cjg49lCf
 # TRACCAR_URL_BASE = ''
 
 #desarrollo
-API_URL_BASE = 'http://127.0.0.1:8000'
+API_URL_BASE = 'http://127.0.0.1:5555'
 TRACCAR_URL_BASE = 'https://demo2.traccar.org'
 # Application definition
 

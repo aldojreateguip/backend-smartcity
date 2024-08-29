@@ -11,8 +11,8 @@ def login_view(request):
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
-            print(username)
-            print(password)
+            # print(username)
+            # print(password)
             user = MUsuaBackend().authenticate(request, username=username, password=password)
 
             if user is not None:
