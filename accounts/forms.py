@@ -75,11 +75,11 @@ class SDireForm(forms.ModelForm):
 class Step1Form(forms.Form):
     pers_chnomper = forms.CharField(
         max_length=100,
-        widget=forms.TextInput(attrs={'class': 'w-full p-2 border-2 rounded-lg text-md border-gray-500 focus:ring-0 focus:border-2 focus:border-blue-500 focus:outline-none focus:placeholder-transparent'}),
+        widget=forms.TextInput(attrs={'class': 'w-full p-2 border-2 rounded-lg text-md border-gray-500 focus:ring-0 uppercase focus:border-2 focus:border-blue-500 focus:outline-none focus:placeholder-transparent'}),
     )
     pers_chapeper = forms.CharField(
         max_length=100,
-        widget=forms.TextInput(attrs={'class': 'w-full p-2 border-2 rounded-lg text-md border-gray-500 focus:ring-0 focus:border-2 focus:border-blue-500 focus:outline-none focus:placeholder-transparent'}),
+        widget=forms.TextInput(attrs={'class': 'w-full p-2 border-2 rounded-lg text-md border-gray-500 focus:ring-0 uppercase focus:border-2 focus:border-blue-500 focus:outline-none focus:placeholder-transparent'}),
     )
     pers_chdocide = forms.CharField(
         max_length=20,
@@ -87,8 +87,19 @@ class Step1Form(forms.Form):
     )
     pers_chemaper = forms.CharField(
         max_length=300,
-        widget=forms.EmailInput(attrs={'class': 'w-full p-2 border-2 rounded-lg text-md border-gray-500 focus:ring-0 focus:border-2 focus:border-blue-500 focus:outline-none focus:placeholder-transparent', 'placeholder':'correo@dominio.com'}),
+        widget=forms.EmailInput(attrs={'class': 'w-full p-2 border-2 rounded-lg text-md border-gray-500 focus:ring-0 focus:border-2 focus:border-blue-500 focus:outline-none focus:placeholder-transparent', 'placeholder':'correo@dominio.com', 'style':'text-transform: lowercase;'}),
     )
+    def clean_pers_chnomper(self):
+        data = self.cleaned_data['pers_chnomper']
+        return data.upper()
+
+    def clean_pers_chapeper(self):
+        data = self.cleaned_data['pers_chapeper']
+        return data.upper()
+
+    def clean_pers_chemaper(self):
+        data = self.cleaned_data['pers_chemaper']
+        return data.lower()
 
 class Step2Form(forms.Form):
     pers_chcelper = forms.CharField(

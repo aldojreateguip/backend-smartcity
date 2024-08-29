@@ -26,14 +26,14 @@ def dashboard_view(request):
     device_url = settings.API_URL_BASE + '/devices/'
     headers = {'Authorization': settings.API_KEY_SSMC}
     data = []
-    print('solicitando datos de dispositivos')
+    # print('solicitando datos de dispositivos')
     devices = requests.post(device_url, headers=headers)
-    print('dispositivos obtenidos')
-    print(devices)
+    # print('dispositivos obtenidos')
+    # print(devices)
     if devices.status_code == 200:
         data = devices.json()
 
-    print(data)
+    # print(data)
     # Renderizar el mapa en una plantilla HTML y devolverla como respuesta
     return render(request, 'dashboard/dashboard.html', {'latitud': latitud, 'longitud': longitud, 'devices_data':data['dispositivo']})
 
