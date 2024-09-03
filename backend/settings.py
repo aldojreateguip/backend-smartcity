@@ -11,28 +11,30 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-from dotenv import load_dotenv
-import os
+import os, environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-load_dotenv()
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+env = environ.Env()
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-PROD = os.getenv('PROD')
+PROD = env('PROD')
 if PROD == True:
-    DEBUG=os.getenv('DEBUG_PROD')
+    DEBUG=env('DEBUG_PROD')
 else:
-    DEBUG=os.getenv('DEBUG')
+    DEBUG=env('DEBUG')
     
 
-ALLOWED_HOSTS = os.getenv('ALLOW_HOSTS', '').split(',') if os.getenv('ALLOW_HOSTS') else []
+ALLOWED_HOSTS = env('ALLOW_HOSTS', default='').split(',') if env('ALLOW_HOSTS', default='') else []
 
 AUTH_USER_MODEL = 'accounts.MUsua'
 API_USR_TRACCAR = 'ierrakato98@gmail.com'
@@ -119,21 +121,21 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': os.getenv('DB_ENGINE_PROD'),
-        'NAME': os.getenv('DB_NAME_PROD'),
-        'USER': os.getenv('DB_USER_PROD'),
-        'PASSWORD': os.getenv('DB_PASSWORD_PROD'),
-        'HOST': os.getenv('DB_HOST_PROD'),
-        'PORT': os.getenv('DB_PORT_PROD'),
+        'ENGINE': env('DB_ENGINE_PROD'),
+        'NAME': env('DB_NAME_PROD'),
+        'USER': env('DB_USER_PROD'),
+        'PASSWORD': env('DB_PASSWORD_PROD'),
+        'HOST': env('DB_HOST_PROD'),
+        'PORT': env('DB_PORT_PROD'),
         'OPTIONS': {'sql_mode': 'STRICT_ALL_TABLES'},
     },
     'local': {
-        'ENGINE': os.getenv('DB_ENGINE'),
-        'NAME': os.getenv('DB_NAME'),
-        'USER': os.getenv('DB_USER'),
-        'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': os.getenv('DB_HOST'),
-        'PORT': os.getenv('DB_PORT'),
+        'ENGINE': env('DB_ENGINE'),
+        'NAME': env('DB_NAME'),
+        'USER': env('DB_USER'),
+        'PASSWORD': env('DB_PASSWORD'),
+        'HOST': env('DB_HOST'),
+        'PORT': env('DB_PORT'),
         'OPTIONS': {'sql_mode': 'STRICT_ALL_TABLES'},
     }
 }
