@@ -1,0 +1,53 @@
+{% load static %}
+
+<nav class="w-full sticky top-0 right-0 z-[9999] bg-slate-900 absolute h-50">
+    <div class="w-full max-w-[120rem] mx-auto px-3 py-3 lg:px-5 lg:pl-3">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center justify-start">
+                <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar" type="button" class="inline-flex items-center p-2 text-sm rounded-lg sm:hidden focus:outline-none focus:ring-2 text-gray-400 hover:bg-gray-700 focus:ring-gray-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+                    </svg>
+                </button>
+                <div class="flex ml-2 md:mr-24">
+                    <img src="{% static 'img/logo.png' %}" alt="MPM" class="h-10 mr-2" />
+                    <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap text-white">NETO</span>
+                </div>
+            </div>
+            <div class="flex items-center">
+                <div class="flex items-center ml-3">
+                    <div>
+                        <button type="button" class="flex text-sm bg-gray-800 rounded-full focus:ring-2 focus:ring-gray-600" aria-expanded="false" data-dropdown-toggle="dropdown-user">
+                            <svg class="p-1 fill-gray-500" xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+                                <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
+                            </svg>
+                        </button>
+                        <div class="relative">
+                            <div class="absolute right-0 mt-5 z-50 hidden text-base list-none rounded shadow bg-gray-700 divide-gray-600" id="dropdown-user">
+                                <div class="px-4 py-3" role="none">
+                                    <p class="text-sm text-white" role="none">
+                                    Usuario
+                                    </p>
+                                    <p class="text-sm font-medium truncate text-gray-300" role="none">
+                                    user.user@mail.com
+                                    </p>
+                                </div>
+                                <ul class="py-1" role="none">
+                                    <li>
+                                        <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white" role="menuitem">Perfil</a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white" role="menuitem">Configuración</a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'logout' %}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white" role="menuitem">Cerrar Sesión</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>                        
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>

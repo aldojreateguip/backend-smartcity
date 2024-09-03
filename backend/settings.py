@@ -25,9 +25,14 @@ load_dotenv()
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG') == 'True'
+PROD = os.getenv('PROD')
+if PROD == True:
+    DEBUG=os.getenv('DEBUG_PROD')
+else:
+    DEBUG=os.getenv('DEBUG')
+    
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = os.getenv('ALLOW_HOSTS', '').split(',') if os.getenv('ALLOW_HOSTS') else []
 
 AUTH_USER_MODEL = 'accounts.MUsua'
 API_USR_TRACCAR = 'ierrakato98@gmail.com'
@@ -40,7 +45,7 @@ API_TOKEN = 'RjBEAiAacXPFcldc_mEzCMw2iFs7VvxBw1ta59jm34FgCuQ7FAIgV6WF5N_Cjg49lCf
 # TRACCAR_URL_BASE = ''
 
 #desarrollo
-API_URL_BASE = 'http://127.0.0.1:5555'
+API_URL_BASE = 'https://neto.munimaynas.gob.pe'
 TRACCAR_URL_BASE = 'https://demo2.traccar.org'
 # Application definition
 
@@ -114,6 +119,15 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 DATABASES = {
     'default': {
+        'ENGINE': os.getenv('DB_ENGINE_PROD'),
+        'NAME': os.getenv('DB_NAME_PROD'),
+        'USER': os.getenv('DB_USER_PROD'),
+        'PASSWORD': os.getenv('DB_PASSWORD_PROD'),
+        'HOST': os.getenv('DB_HOST_PROD'),
+        'PORT': os.getenv('DB_PORT_PROD'),
+        'OPTIONS': {'sql_mode': 'STRICT_ALL_TABLES'},
+    },
+    'local': {
         'ENGINE': os.getenv('DB_ENGINE'),
         'NAME': os.getenv('DB_NAME'),
         'USER': os.getenv('DB_USER'),
@@ -163,7 +177,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 #local
+#Produccion
 STATIC_URL = 'static/'
+MEDIA_URL = 'media/'
+
+STATIC_ROOT = "/home/munimaynas/neto.munimaynas.gob.pe/static"
+MEDIA_ROOT = "/home/munimaynas/neto.munimaynas.gob.pe/media"
 
 #Produccion
 # STATIC_URL = 'static/'
