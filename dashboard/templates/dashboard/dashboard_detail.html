@@ -7,14 +7,14 @@
 {% endblock links_ref %}
 
 {% block content %}
-<main class="w-full min-h-screen px-4 pb-4 bg-blue-800/80 sm:bg-gradient-to-b sm:from-white/80 sm:to-blue-800/80 overflow-y-auto">
-    <section class="pt-4 min-h-[50%] sm:min-h-[20%]">
+<main class="relative z-10 pl-0 transition-all duration-300">
+    <section class="min-h-[50%] sm:min-h-[20%]">
         <div id="mapa" class="w-full min-h-[20rem] sm:min-h-[37.5rem]">
         
         </div>
     </section>
-    <div class="m-4 mx-auto p-2 overflow-x-auto bg-white/50">
-        <table id="dt_detail" class="display">
+    <div class="mb-5 mt-2 overflow-x-auto bg-white/50 p-4">
+        <table id="dt_detail" class="display" style="width: 100%;">
             <thead>
                 <tr>
                     <th>N°</th>
@@ -45,36 +45,76 @@
 {% endblock %}
 {% block javascript %}
 <script src="{% static 'js/externo/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'js/dashboard/dashboard.js' %}"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-
 <script>
     let marker = null;
     let rutaCoords = [];
-    let myMap = L.map('mapa').setView([-3.746241, -73.2478283], 13)
+    let myMap = L.map('mapa').setView([-3.746241, -73.2478283], 13);
+    let polyline = null;  // Asegúrate de definir polyline para evitar errores
 
-    const urlOpenLayers = 'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'
+    const urlOpenLayers = 'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png';
     L.tileLayer(urlOpenLayers, {
         maxZoom: 19,
-    }).addTo(myMap)
+    }).addTo(myMap);
 
-    
     const iconMarker = L.icon({
         iconUrl: '/static/img/camion-2.png',
         iconSize: [60, 30],
         iconAnchor: [30, 60]
-    })
-    
-    {% for data in dashboard_detail %}
-        {% if data.latitud != 0.0 and data.longitud != 0.0 %}
-            rutaCoords.push([{{ data.latitud }}, {{ data.longitud }}]);
-        {% endif %}
-    {% endfor %}
-    // Crear la polilínea
-    let polyline = L.polyline(rutaCoords, { color: 'red' }).addTo(myMap);
+    });
 
-    // Ajustar el mapa para que se ajuste a la ruta
-    myMap.fitBounds(polyline.getBounds());
+    // Función para actualizar la ruta cada 3 segundos
+    function actualizarRuta() {
+        // Obtener la URL actual
+        let currentUrl = window.location.pathname;
+        
+        // Reemplazar "dashboard" por "gethistory" en la URL
+        let newUrl = currentUrl.replace('dashboard', 'gethistory');
+        
+        $.ajax({
+            url: newUrl,  // Usamos la URL modificada
+            method: 'GET',
+            dataType: 'json',
+            success: function (response) {
+                let registros = response.dashboard_detail;
 
+                // Verificar si hay datos
+                if (!registros || registros.length === 0) {
+                    // console.log('No se encontraron datos.');
+                    return;  // Salir de la función si no hay datos
+                }
+                
+                // Vaciar la lista de coordenadas
+                rutaCoords = [];
+
+                // Agregar las nuevas coordenadas
+                for (let i = 0; i < registros.length; i++) {
+                    let lat = registros[i].latitud;
+                    let lon = registros[i].longitud;
+                    rutaCoords.push([lat, lon]);
+                }
+
+                // Remover la polilínea anterior si existe
+                if (polyline) {
+                    myMap.removeLayer(polyline);
+                }
+                
+                // Dibujar la nueva polilínea
+                polyline = L.polyline(rutaCoords, { color: 'red' }).addTo(myMap);
+
+                // Ajustar el mapa para que se ajuste a la nueva ruta
+                myMap.fitBounds(polyline.getBounds());
+            },
+            error: function (error) {
+                // console.log('Error al obtener nuevas coordenadas:', error);
+            }
+        });
+    }
+
+    // Ejecutar la función inicialmente y luego cada 3 segundos
+    setInterval(actualizarRuta, 3000);
 </script>
-{% endblock %}
+
+{% endblock javascript %}

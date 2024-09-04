@@ -61,7 +61,8 @@ $(document).ready(function () {
                         $('#error-message').addClass('opacity-0');
                     }, 2000);
                 } else {
-                    window.location.assign('/dashboard');
+                    
+                    window.location.assign(response.url);
                 }
             },
             error: function (xhr, error) {

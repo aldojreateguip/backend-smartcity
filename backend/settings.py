@@ -35,19 +35,26 @@ else:
     
 
 ALLOWED_HOSTS = env('ALLOW_HOSTS', default='').split(',') if env('ALLOW_HOSTS', default='') else []
-
+ALLOW_CORS = env('ALLOW_CORS', default='')
+print(ALLOW_CORS)
+CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in ALLOW_CORS.split(',') if origin.strip().startswith(('http://', 'https://'))]
 AUTH_USER_MODEL = 'accounts.MUsua'
 API_USR_TRACCAR = 'ierrakato98@gmail.com'
 API_PSS_TRACCAR = '159357852Aj.'
 API_USRID_TRACCAR = '17648'
-API_KEY_SSMC = 'Bearer RjBEAiAacXPFcldc_mEzCMw2iFs7VvxBw1ta59jm34FgCuQ7FAIgV6WF5N_Cjg49lCfhkFXFqkt7P3e-lcS_M7i_KDS3yHJ7InUiOjE3NjQ4LCJlIjoiMjAyNS0wNy0yOFQwNTowMDowMC4wMDArMDA6MDAifQ'
-API_TOKEN = 'RjBEAiAacXPFcldc_mEzCMw2iFs7VvxBw1ta59jm34FgCuQ7FAIgV6WF5N_Cjg49lCfhkFXFqkt7P3e-lcS_M7i_KDS3yHJ7InUiOjE3NjQ4LCJlIjoiMjAyNS0wNy0yOFQwNTowMDowMC4wMDArMDA6MDAifQ'
+API_KEY_SSMC = 'Bearer RzBFAiEAqlQch7fRc34OaWG6FTOilAt1j2Ns_6RqXrnWC6F6k_8CICQjuQ5_kMwfOZYMsy_sfKM4Yb7UAXJCwxpVTPrEb27weyJ1Ijo0MTg0LCJlIjoiMjAyOC0xMi0xMFQwNTowMDowMC4wMDArMDA6MDAifQ'
+API_TOKEN = 'RzBFAiEAqlQch7fRc34OaWG6FTOilAt1j2Ns_6RqXrnWC6F6k_8CICQjuQ5_kMwfOZYMsy_sfKM4Yb7UAXJCwxpVTPrEb27weyJ1Ijo0MTg0LCJlIjoiMjAyOC0xMi0xMFQwNTowMDowMC4wMDArMDA6MDAifQ'
 #produccion
 # API_URL_BASE = 'https://ssmc.munimaynas.gob.pe'
 # TRACCAR_URL_BASE = ''
 
 #desarrollo
-API_URL_BASE = 'https://neto.munimaynas.gob.pe'
+BUILD = env('BUILD')
+if BUILD == True:
+    API_URL_BASE = 'https://neto.munimaynas.gob.pe'
+else:
+    API_URL_BASE = 'http://127.0.0.1:8000'
+    
 TRACCAR_URL_BASE = 'https://demo2.traccar.org'
 # Application definition
 
@@ -146,7 +153,9 @@ DATABASES = {
 AUTHENTICATION_BACKENDS = [
     'accounts.backends.MUsuaBackend',
     'django.contrib.auth.backends.ModelBackend',
+    "sesame.backends.ModelBackend",
 ]
+SESAME_MAX_AGE = 12
 
 AUTH_PASSWORD_VALIDATORS = [
     {
