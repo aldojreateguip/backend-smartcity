@@ -4,21 +4,19 @@ from django.contrib.auth.models import AnonymousUser
 from .forms import LoginForm,MPersForm,MUsuaForm,Step1Form,Step2Form,SDireForm
 from .backends import MUsuaBackend
 from django.http import JsonResponse
-
+from django.conf import settings
 def login_view(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
-            # print(username)
-            # print(password)
             user = MUsuaBackend().authenticate(request, username=username, password=password)
 
             if user is not None:
                 user.backend = f"{MUsuaBackend.__module__}.{MUsuaBackend.__name__}"
                 login(request, user, backend=f"{MUsuaBackend.__module__}.{MUsuaBackend.__name__}")
-                return redirect('dashboard')  
+                return JsonResponse({"url": settings.API_URL_BASE + "/dashboard/"}) 
             else:
                 return JsonResponse({'success': False, 'errorslog': 'Credenciales Incorrectas'})
         else:
