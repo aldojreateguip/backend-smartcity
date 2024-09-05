@@ -1,147 +1,168 @@
+const iconMarkerUrl = "{% static 'img/camion-2.png' %}";
+var dtails_dir = '0';
+let iconMarker;
+// inicializar mapa
+let marker = null;
+let myMap;
+let dt_devices_table;
+let dt_details_table;
+let urlOpenLayers;
+let dt_details;
+let dt_devices;
+
 $(document).ready(function () {
-    showSpinner();
-    init_dt_devices();
     initMap();
-    hideSpinner();
+    init_dt_devices();
+    init_dt_details();
+    ocultar_details_table();
 });
 
-function init_dt_devices() {
-    if ($.fn.DataTable.isDataTable('#dt_devices')) {
-        $('#dt_devices').DataTable().destroy();
-    }
 
+function ocultar_devices_table() {
+    // Añade la clase 'hidden' a la tabla de detalles y la elimina de la tabla de dispositivos
+    document.getElementById('devices_box').classList.add('hidden');
+    document.getElementById('details_box').classList.remove('hidden');
+    document.getElementById('devices_title').classList.add('hidden');
+    document.getElementById('details_title').classList.remove('hidden');
+    destroydt_details();
+    init_dt_details();
+}
+
+function ocultar_details_table() {
+    // Añade la clase 'hidden' a la tabla de dispositivos y la elimina de la tabla de detalles
+    document.getElementById('devices_box').classList.remove('hidden');
+    document.getElementById('details_box').classList.add('hidden');
+    document.getElementById('devices_title').classList.remove('hidden');
+    document.getElementById('details_title').classList.add('hidden');
+    destroydt_devices();
+    init_dt_devices();
+}
+
+
+function init_dt_devices() {
     dt_devices = $('#dt_devices').DataTable({
         lengthChange: false,
         scrollX: true,
-        language: {
-            "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
-        },
+        // language: {
+        //     "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+        // },
         dom: '<"top"lf>t<"bottom"ip><"clear">', // Personaliza la estructura de la tabla
-        initComplete: function () {
-            // Agrega el título a la tabla
-            $('<h2 class="font-sans text-[#166658] underline font-bold">COMPACTADORAS</h2>').prependTo('.dataTables_wrapper');
-        }
     });
+    dtails_dir = '0';
 }
 
-
-function init_dt_details(id) {
-    if ($.fn.DataTable.isDataTable('#dt_detail')) {
-        $('#dt_detail').DataTable().destroy();
-    }
-
+function init_dt_details() {
     dt_details = $('#dt_detail').DataTable({
         lengthChange: false,
         scrollX: true,
-        language: {
-            "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
-        },
+        // language: {
+        //     "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+        // },
         dom: '<"top"lf>t<"bottom"ip><"clear">', // Personaliza la estructura de la tabla
-        initComplete: function () {
-            // Crea el HTML para el título y el botón
-            const titleHtml = `
-                <div class="flex items-center space-x-4">
-                    <h2 class="font-sans text-[#166658] underline font-bold">COMPACTADORA - ${id}</h2>
-                    <button onclick="initBackBtn()" id="backBtn" class="p-2 text-sm focus:outline-none focus:ring-0 text-white h-12 w-12">
-                        <svg
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                            stroke="#ff0000"
-                            width="24" height="24"  <!-- Puedes ajustar el tamaño según sea necesario -->
-                            >
-                            <!-- Grupo para el fondo del SVG -->
-                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                            
-                            <!-- Grupo para las guías de trazado del SVG -->
-                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                            
-                            <!-- Grupo para los íconos y el contenido principal del SVG -->
-                            <g id="SVGRepo_iconCarrier">
-                                <!-- Línea diagonal que representa una 'X' -->
-                                <path
-                                d="M14.5 9.5L9.5 14.5M9.5 9.5L14.5 14.5"
-                                stroke="#ff0000"
-                                stroke-width="1.5"
-                                stroke-linecap="round"
-                                ></path>
-                                
-                                <!-- Círculo con borde que representa el contorno del icono -->
-                                <path
-                                d="M7 3.33782C8.47087 2.48697 10.1786 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 10.1786 2.48697 8.47087 3.33782 7"
-                                stroke="#ff0000"
-                                stroke-width="1.5"
-                                stroke-linecap="round"
-                                ></path>
-                            </g>
-                            </svg>
-                    </button>
-                </div>
-            `;
-
-            // Inserta el título y el botón en el contenedor de DataTables
-            $('.dataTables_wrapper').prepend(titleHtml);
-            dtails_dir = '1';
-        }
     });
+    dtails_dir = '1';
+}
+
+function destroydt_details() {
+    if (dt_details) {
+        dt_details.destroy();
+    }
+}
+function destroydt_devices() {
+    if (dt_devices) {
+        dt_devices.destroy();
+    }
 }
 
 
-
-const detallebtns = document.getElementsByClassName('detallebtn');
-
-async function initDetailsBtn(element) {
-    const id = element.target.closest('button').id;
-
-
-    const url = `/dashboard/${id}/`; // Asegúrate de que esta URL sea correcta
-
-    try {
-        const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-
-        const html = await response.text();
-        const tables_box = document.getElementById('tables_box');
-        tables_box.innerHTML = html;
-
-        init_dt_details(id);
-    } catch (error) {
-        console.error('Error:', error);
-    }
-};
-
-
-async function initBackBtn() {
+async function getDetailsData(element) {
     showSpinner();
-    const url = `/getdevicesdata/`; // Asegúrate de que esta URL sea correcta
-    dtails_dir = '0';
-    try {
-        // Realiza la solicitud fetch a la URL
-        const response = await fetch(url);
-
-        // Verifica si la respuesta es exitosa
+    const id = element.id;
+    document.getElementById('idCompactadora').innerHTML = '';
+    document.getElementById('idCompactadora').textContent = id;
+    ocultar_devices_table();
+    try{
+        const response = await fetch(`/dashboard/${id}/`, {
+            method: 'GET',
+        });
         if (!response.ok) {
-            throw new Error('Network response was not ok');
+            throw new Error(`Error: ${response.statusText}`);
+        }
+        const data = await response.json();
+        console.log(data); // Limpiar datos existentes
+        dt_details.clear();  // Limpiar datos existentes
+        counter = 0;
+        data.dashboard_detail.forEach(device => {
+            counter = counter+1;
+            dt_details.row.add([
+                counter,
+                device.fecha,
+                `${device.latitud}, ${device.longitud}`, // Formato de latitud y longitud
+                device.velocidad,
+                device.distacia,
+                device.tiempoDetenido,
+            ]).draw();  // Añadir fila y redibujar tabla
+        });
+    }
+    catch{
+        toastr.error("Ha ocurrido un error en la actualizacion de datos");
+    };
+    hideSpinner();
+};
+
+
+async function getDevicesData() {
+    showSpinner();
+    ocultar_details_table();
+    try{
+        const response = await fetch('/getdevicesdata/', {
+            method: 'GET',
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error: ${response.statusText}`);
         }
 
-        // Obtiene el contenido HTML de la respuesta
-        const html = await response.text();
-
-        // Inserta el contenido HTML en el contenedor con ID 'tables_box'
-        const tables_box = document.getElementById('tables_box');
-        tables_box.innerHTML = html;
-
-        // Inicializa la tabla con DataTables pasando el ID correcto
-        init_dt_devices();
+        const data = await response.json();
+        dt_devices.clear(); // Limpiar datos existentes
+        console.log(data);
+        counter = 0;
+        data.devices_data.forEach(device => {
+            counter = counter+1;
+            dt_devices.row.add([
+                counter,
+                device.placa,
+                device.modelo === null ? 'S/M': device.modelo,
+                device.categoria === null ? 'S/C' : device.categoria,
+                device.actualizado,
+                device.estado,
+                `<div>
+                    <button type="button" onclick="getDetailsData(this)" id="${device.id}" class="detallebtn p-2 group transform transition-transform duration-300 hover:scale-105 hover:filter hover:brightness-90">
+                        <svg class="transition-all duration-300 ease-in-out" fill="#166658" viewBox="0 0 64 64" width="24" height="24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" stroke="#166658">
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                            <g id="SVGRepo_iconCarrier">
+                                <path d="M36,21c0-2.206-1.794-4-4-4s-4,1.794-4,4s1.794,4,4,4S36,23.206,36,21z M30,21c0-1.103,0.897-2,2-2s2,0.897,2,2 s-0.897,2-2,2S30,22.103,30,21z"></path>
+                                <path d="M27,41v6h10v-6h-2V27h-8v6h2v8H27z M29,31v-2h4v14h2v2h-6v-2h2V31H29z"></path>
+                                <path d="M32,1C14.907,1,1,14.907,1,32s13.907,31,31,31s31-13.907,31-31S49.093,1,32,1z M32,61C16.009,61,3,47.991,3,32 S16.009,3,32,3s29,13.009,29,29S47.991,61,32,61z"></path>
+                                <path d="M32,7c-5.236,0-10.254,1.607-14.512,4.649l1.162,1.628C22.567,10.479,27.184,9,32,9c12.682,0,23,10.318,23,23 c0,4.816-1.479,9.433-4.277,13.35l1.628,1.162C55.393,42.254,57,37.236,57,32C57,18.215,45.785,7,32,7z"></path>
+                                <path d="M32,55C19.318,55,9,44.682,9,32c0-4.817,1.479-9.433,4.277-13.35l-1.627-1.162C8.608,21.746,7,26.764,7,32 c0,13.785,11.215,25,25,25c5.236,0,10.254-1.607,14.512-4.649l-1.162-1.628C41.433,53.521,36.816,55,32,55z"></path>
+                            </g>
+                        </svg>
+                    </button>
+                </div>`
+            ]).draw();  // Añadir fila y redibujar tabla  // Añadir fila y redibujar tabla
+        });
         hideSpinner();
-    } catch (error) {
-        // Manejo de errores en caso de que la solicitud falle
-        console.error('Error:', error);
+    }
+    catch{
+        toastr.error("Ha ocurrido un error en la actualizacion de datos");
     }
 };
 
+
+
+// ##########################################################
 
 document.getElementById('toggleButton').addEventListener('click', function () {
     const sidebar = document.getElementById('sidebar');
@@ -160,33 +181,28 @@ document.getElementById('toggleButton').addEventListener('click', function () {
 
 
 function initMap() {
-    const iconMarkerUrl = "{% static 'img/camion-2.png' %}";
-    var dtails_dir = '0';
+    myMap = L.map('mapa').setView([-3.746241, -73.2478283], 13);
 
-    // inicializar mapa
-    let marker = null;
-    let myMap = L.map('mapa').setView([-3.746241, -73.2478283], 13);
+    urlOpenLayers = 'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png';
 
-    const urlOpenLayers = 'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png';
     L.tileLayer(urlOpenLayers, {
         maxZoom: 19,
     }).addTo(myMap);
 
-    const iconMarker = L.icon({
+    iconMarker = L.icon({
         iconUrl: iconMarkerUrl,
         iconSize: [60, 30],
         iconAnchor: [30, 60]
     });
 }
 
-if (dtails_dir == '0') {
-    setInterval(actualizarUbicacionMarcadorDevices, 3000);
-} else {
-    setInterval(actualizarRutaDetails, 3000);
-}
+// if (dtails_dir == '0') {
+//     setInterval(actualizarUbicacionMarcadorDevices, 3000);
+// } else {
+//     setInterval(actualizarRutaDetails, 3000);
+// }
 
 function actualizarUbicacionMarcadorDevices() {
-    console.log(dtails_dir);
     $.ajax({
         url: '/getmarker/',
         method: 'GET',
@@ -218,7 +234,6 @@ function actualizarUbicacionMarcadorDevices() {
 
 
 function actualizarRutaDetails() {
-    console.log(dtails_dir);
     // Obtener la URL actual
     let currentUrl = window.location.pathname;
 

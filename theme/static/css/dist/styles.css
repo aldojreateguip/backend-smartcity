@@ -1391,11 +1391,6 @@ select {
   background-color: rgb(255 255 255 / 0.5);
 }
 
-.bg-\[\#F2EFE9\] {
-  --tw-bg-opacity: 1;
-  background-color: rgb(242 239 233 / var(--tw-bg-opacity));
-}
-
 .bg-opacity-70 {
   --tw-bg-opacity: 0.7;
 }
@@ -1724,14 +1719,6 @@ select {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.hover\:h-20:hover {
-  height: 5rem;
-}
-
-.hover\:w-20:hover {
-  width: 5rem;
-}
-
 .hover\:scale-105:hover {
   --tw-scale-x: 1.05;
   --tw-scale-y: 1.05;
@@ -1900,28 +1887,12 @@ select {
   --tw-ring-color: rgb(75 85 99 / var(--tw-ring-opacity));
 }
 
-.group:hover .group-hover\:h-\[50px\] {
-  height: 50px;
-}
-
-.group:hover .group-hover\:w-\[50px\] {
-  width: 50px;
-}
-
-.group:hover .group-hover\:w-\[200px\] {
-  width: 200px;
-}
-
 .group:hover .group-hover\:fill-\[\#189A2E\] {
   fill: #189A2E;
 }
 
 .group:hover .group-hover\:fill-\[\#ff0000\] {
   fill: #ff0000;
-}
-
-.group:hover .group-hover\:stroke-blue-800 {
-  stroke: #1e40af;
 }
 
 .group:hover .group-hover\:text-\[\#FFCB3C\] {
