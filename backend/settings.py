@@ -25,7 +25,7 @@ SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 PROD = env('PROD')
-if PROD == True:
+if PROD:
     DEBUG=env('DEBUG_PROD')
     ALLOWED_HOSTS = env('ALLOW_HOSTS', default='').split(',') if env('ALLOW_HOSTS', default='') else []
     ALLOW_CORS = env('ALLOW_CORS', default='')
@@ -43,10 +43,9 @@ API_PSS_TRACCAR = '159357852Aj.'
 API_USRID_TRACCAR = '17648'
 API_KEY_SSMC = 'Bearer RzBFAiEAqlQch7fRc34OaWG6FTOilAt1j2Ns_6RqXrnWC6F6k_8CICQjuQ5_kMwfOZYMsy_sfKM4Yb7UAXJCwxpVTPrEb27weyJ1Ijo0MTg0LCJlIjoiMjAyOC0xMi0xMFQwNTowMDowMC4wMDArMDA6MDAifQ'
 API_TOKEN = 'RzBFAiEAqlQch7fRc34OaWG6FTOilAt1j2Ns_6RqXrnWC6F6k_8CICQjuQ5_kMwfOZYMsy_sfKM4Yb7UAXJCwxpVTPrEb27weyJ1Ijo0MTg0LCJlIjoiMjAyOC0xMi0xMFQwNTowMDowMC4wMDArMDA6MDAifQ'
-
 #desarrollo
 BUILD = env('BUILD')
-if BUILD == True:
+if BUILD:
     API_URL_BASE = env('API_URL_BASE')
 else:
     API_URL_BASE = env('API_URL_BASE_LOCAL')
