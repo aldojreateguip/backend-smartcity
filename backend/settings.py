@@ -20,9 +20,6 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 env = environ.Env()
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
-
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('SECRET_KEY')
 
@@ -30,32 +27,31 @@ SECRET_KEY = env('SECRET_KEY')
 PROD = env('PROD')
 if PROD == True:
     DEBUG=env('DEBUG_PROD')
+    ALLOWED_HOSTS = env('ALLOW_HOSTS', default='').split(',') if env('ALLOW_HOSTS', default='') else []
+    ALLOW_CORS = env('ALLOW_CORS', default='')
+    CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in ALLOW_CORS.split(',') if origin.strip().startswith(('http://', 'https://'))]
 else:
     DEBUG=env('DEBUG')
+    ALLOWED_HOSTS = env('ALLOW_HOSTS_LOCAL', default='').split(',') if env('ALLOW_HOSTS_LOCAL', default='') else []
+    ALLOW_CORS = env('ALLOW_CORS_LOCAL', default='')
+    CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in ALLOW_CORS.split(',') if origin.strip().startswith(('http://', 'https://'))]
     
 
-ALLOWED_HOSTS = env('ALLOW_HOSTS', default='').split(',') if env('ALLOW_HOSTS', default='') else []
-ALLOW_CORS = env('ALLOW_CORS', default='')
-print(ALLOW_CORS)
-CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in ALLOW_CORS.split(',') if origin.strip().startswith(('http://', 'https://'))]
 AUTH_USER_MODEL = 'accounts.MUsua'
 API_USR_TRACCAR = 'ierrakato98@gmail.com'
 API_PSS_TRACCAR = '159357852Aj.'
 API_USRID_TRACCAR = '17648'
 API_KEY_SSMC = 'Bearer RzBFAiEAqlQch7fRc34OaWG6FTOilAt1j2Ns_6RqXrnWC6F6k_8CICQjuQ5_kMwfOZYMsy_sfKM4Yb7UAXJCwxpVTPrEb27weyJ1Ijo0MTg0LCJlIjoiMjAyOC0xMi0xMFQwNTowMDowMC4wMDArMDA6MDAifQ'
 API_TOKEN = 'RzBFAiEAqlQch7fRc34OaWG6FTOilAt1j2Ns_6RqXrnWC6F6k_8CICQjuQ5_kMwfOZYMsy_sfKM4Yb7UAXJCwxpVTPrEb27weyJ1Ijo0MTg0LCJlIjoiMjAyOC0xMi0xMFQwNTowMDowMC4wMDArMDA6MDAifQ'
-#produccion
-# API_URL_BASE = 'https://ssmc.munimaynas.gob.pe'
-# TRACCAR_URL_BASE = ''
 
 #desarrollo
 BUILD = env('BUILD')
 if BUILD == True:
-    API_URL_BASE = 'https://neto.munimaynas.gob.pe'
+    API_URL_BASE = env('API_URL_BASE')
 else:
-    API_URL_BASE = 'http://127.0.0.1:8000'
+    API_URL_BASE = env('API_URL_BASE_LOCAL')
     
-TRACCAR_URL_BASE = 'https://demo2.traccar.org'
+TRACCAR_URL_BASE = env('TRACCAR_URL_BASE')
 # Application definition
 
 INSTALLED_APPS = [
@@ -115,16 +111,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'backend.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
 
 DATABASES = {
     'default': {
@@ -194,15 +180,5 @@ MEDIA_URL = 'media/'
 
 STATIC_ROOT = "/home/munimaynas/neto.munimaynas.gob.pe/static"
 MEDIA_ROOT = "/home/munimaynas/neto.munimaynas.gob.pe/media"
-
-#Produccion
-# STATIC_URL = 'static/'
-# MEDIA_URL = "media/"
-
-# STATIC_ROOT = "/home/munimaynas/ssmc.munimaynas.gob.pe/static"
-# MEDIA_ROOT = "/home/munimaynas/ssmc.munimaynas.gob.pe/media"
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
