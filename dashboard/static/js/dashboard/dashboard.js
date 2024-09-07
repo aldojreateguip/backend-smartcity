@@ -10,13 +10,31 @@ let urlOpenLayers;
 let dt_details;
 let dt_devices;
 
+
+
 $(document).ready(function () {
     initMap();
+    initSettingsBtn();
     init_dt_devices();
     init_dt_details();
     ocultar_details_table();
+    
 });
 
+
+function initSettingsBtn(){
+    // Manejar el clic en la imagen del usuario
+    $('[data-dropdown-toggle="dropdown-user"]').on('click', function () {
+        $('#dropdown-user').toggleClass('hidden');
+    });
+
+    // Ocultar el dropdown-user al hacer clic fuera de él
+    $(document).on('click', function (event) {
+        if (!$(event.target).closest('#dropdown-user').length && !$(event.target).closest('[data-dropdown-toggle="dropdown-user"]').length) {
+            $('#dropdown-user').addClass('hidden');
+        }
+    });
+}
 
 function ocultar_devices_table() {
     // Añade la clase 'hidden' a la tabla de detalles y la elimina de la tabla de dispositivos
@@ -81,7 +99,7 @@ async function getDetailsData(element) {
     document.getElementById('idCompactadora').innerHTML = '';
     document.getElementById('idCompactadora').textContent = id;
     ocultar_devices_table();
-    try{
+    try {
         const response = await fetch(`/dashboard/${id}/`, {
             method: 'GET',
         });
@@ -93,7 +111,7 @@ async function getDetailsData(element) {
         dt_details.clear();  // Limpiar datos existentes
         counter = 0;
         data.dashboard_detail.forEach(device => {
-            counter = counter+1;
+            counter = counter + 1;
             dt_details.row.add([
                 counter,
                 device.fecha,
@@ -104,7 +122,7 @@ async function getDetailsData(element) {
             ]).draw();  // Añadir fila y redibujar tabla
         });
     }
-    catch{
+    catch {
         toastr.error("Ha ocurrido un error en la actualizacion de datos");
     };
     hideSpinner();
@@ -114,7 +132,7 @@ async function getDetailsData(element) {
 async function getDevicesData() {
     showSpinner();
     ocultar_details_table();
-    try{
+    try {
         const response = await fetch('/getdevicesdata/', {
             method: 'GET',
         });
@@ -128,11 +146,11 @@ async function getDevicesData() {
         console.log(data);
         counter = 0;
         data.devices_data.forEach(device => {
-            counter = counter+1;
+            counter = counter + 1;
             dt_devices.row.add([
                 counter,
                 device.placa,
-                device.modelo === null ? 'S/M': device.modelo,
+                device.modelo === null ? 'S/M' : device.modelo,
                 device.categoria === null ? 'S/C' : device.categoria,
                 device.actualizado,
                 device.estado,
@@ -155,7 +173,7 @@ async function getDevicesData() {
         });
         hideSpinner();
     }
-    catch{
+    catch {
         toastr.error("Ha ocurrido un error en la actualizacion de datos");
     }
 };
