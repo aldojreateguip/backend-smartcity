@@ -1,0 +1,24 @@
+<table id="dt_detail" class="display" style="width: 100%;">
+    <thead>
+        <tr>
+            <th>N°</th>
+            <th>Fecha de Registro</th>
+            <th>Latitud y Longitud</th>
+            <th>Velocidad</th>
+            <th>Distancia con el Punto Anterior</th>
+            <th>Tiempo Detenido</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for data in dashboard_detail %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ data.fecha }}</td>
+            <td>({{ data.latitud }}, {{ data.longitud }})</td>
+            <td>{{ data.velocidad }}</td>
+            <td>{{ data.distancia }}</td>
+            <td>{{ data.tiempoDetenido }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

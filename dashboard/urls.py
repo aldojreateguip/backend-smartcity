@@ -11,6 +11,8 @@ urlpatterns = [
     
     path('dashboard/', views.dashboard_view, name='dashboard'),
     path('dashboard/<int:device_id>/', views.dashboard_detail, name='dashboard_detail'),
+    path('gethistory/<int:device_id>/', views.dashboard_detail_ajax, name='history_details'),
+    path('getdevicesdata/', views.devices_table, name='devices_data'),
     path('datatable/', TuVistaDataTable.as_view(), name='datatable'),
     path('getmarker/', views.get_mapmarker, name='marker'),
 
