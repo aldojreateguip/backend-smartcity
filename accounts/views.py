@@ -1,9 +1,11 @@
 from django.shortcuts import redirect, render
-from django.contrib.auth import login, logout as django_logout
+from django.contrib.auth import login, logout as django_logout, authenticate
 from django.contrib.auth.models import AnonymousUser
 from .forms import LoginForm,MPersForm,MUsuaForm,Step1Form,Step2Form,SDireForm
 from .backends import MUsuaBackend
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
 
 def login_view(request):
     if request.method == 'POST':
@@ -94,3 +96,26 @@ def register_step2_view(request):
     else:
         return JsonResponse({'success': False})
     return render(request, 'register/register.html', {'form': form})
+
+def api_login(request):
+    if request.method =='POST':
+        try:
+            data = json.loads(request.body)
+            username = data.get('username')
+            password = data.get('password')
+
+            if not username or not password:
+                return JsonResponse({'success': False, 'message': 'Faltan campos requeridos'})
+            
+            user = MUsuaBackend().authenticate(request, username=username, password=password)
+
+            if user is not None:
+                login(request, user, backend='path.to.backends.MUsuaBackend')
+                return JsonResponse({'success': True, 'message': 'Login exitoso'})
+            else:
+                return JsonResponse({'success': False, 'message': 'Credenciales incorrectas'})
+        
+        except ValueError:
+            return JsonResponse({'success': False, 'message': 'Datos inválidos'})
+    
+    return JsonResponse({'success': False, 'message': 'Método no permitido'}, status=405)
