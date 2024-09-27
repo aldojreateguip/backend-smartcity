@@ -5,15 +5,93 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import cache_control
 from django_datatables_view.base_datatable_view import BaseDatatableView
 import requests
-import json, pytz, datetime, time
+import json, pytz, datetime, time, urllib.parse
 from gps_tracking.views import tracking, get_history_gps
 
 
-def get_mapmarker(request):
-    coordenadas = tracking(request)  # Esperar la ejecución de la función tracking
+def get_mapmarker(request, device_id):
+    api_url = settings.TRACCAR_URL_BASE + '/api/postitions'
+    fecha_actual = datetime.datetime.now()
+
+    queryParams = {
+        'deviceId': device_id,
+        'from':fecha_actual,
+        'to': fecha_actual
+    }
+    
+    encodedParams = urllib.parse.urlencode(queryParams)
+    
+    url = f'{api_url}?{encodedParams}'
+
+    headers = {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+
+    response = requests.get(url, headers=headers)
+
+    if response.status_code == 200:
+        data = response.json()
+        # print(data)
+        coordenadas = {
+            "latitude": data.get("latitude"),
+            "longitude": data.get("longitude"),
+        }
+        return coordenadas
     latitud = coordenadas.get('latitude')
     longitud = coordenadas.get('longitude')
     return JsonResponse({'latitud': latitud, 'longitud': longitud})
+
+def get_mapmarkers(request):
+    headers = {
+        'Content-Type': 'application/json'
+    }
+
+    # Obtiene los devices
+    devices_api = settings.TRACCAR_URL_BASE + '/api/devices'
+    deviceData = {
+        'all': 'true',
+        'userid': '4184'
+    }
+    devicesResponse = requests.get(devices_api, params=deviceData, auth=(settings.API_USR_TRACCAR, settings.API_PSS_TRACCAR))
+    
+    coordenadas_devices = {}
+    devicesId = []
+    if devicesResponse.status_code == 200:
+        devices = devicesResponse.json()
+        for device in devices:
+            devicesId.append(device['id'])
+
+        for device_id in devicesId:
+            # Para cada dispositivo, obtener la última posición
+            position_api = settings.TRACCAR_URL_BASE + '/api/positions'
+            fecha_actual = datetime.datetime.now().isoformat() + 'Z' # Fecha actual en formato ISO
+
+            positionData = {
+                'deviceId': device_id,
+                'to': fecha_actual  # Obtendremos la posición más reciente hasta ahora
+            }
+            positionEncodedParams = urllib.parse.urlencode(positionData)
+            position_url = f'{position_api}?{positionEncodedParams}'
+            # print(position_url)
+            positionResponse = requests.get(position_url, headers=headers, auth=(settings.API_USR_TRACCAR, settings.API_PSS_TRACCAR))
+            # print(positionResponse)
+            if positionResponse.status_code == 200:
+                positions = positionResponse.json()
+                
+                if positions:
+                    # Obtén la última posición (suponiendo que esté en la primera posición del array)
+                    last_position = positions[0] if isinstance(positions, list) else positions
+
+                    coordenadas = {
+                        "latitude": last_position.get("latitude"),
+                        "longitude": last_position.get("longitude"),
+                    }
+                    coordenadas_devices[device_id] = coordenadas
+                else:
+                    # Si no hay posiciones para ese device
+                    coordenadas_devices[device_id] = {"message": "No hay posiciones disponibles"}
+    
+    return JsonResponse({'coordenadas': coordenadas_devices})
 
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
@@ -103,7 +181,9 @@ def devices_table(request):
 def dashboard_detail(request, device_id):
     historial_response = get_history_gps(device_id)
     historial_content = historial_response.content.decode('utf-8')  # Decodificar el contenido en UTF-8
-    historial_data = json.loads(historial_content)  # Cargar el contenido en un objeto JSON
+    historial_data = json.loads(historial_content) # Cargar el contenido en un objeto JSON
+    # Recorrer y eliminar los campos 'motion' y 'evento'
+    
     registros = historial_data["registros"]
     # return render(request, 'dashboard/table_details.html', {'dashboard_detail':registros})
     return JsonResponse({'dashboard_detail':registros})
@@ -114,6 +194,7 @@ def dashboard_detail_ajax(request, device_id):
     historial_data = json.loads(historial_content)
     registros = historial_data["registros"]
     
+    # print(registros)
     # Verificar si es una solicitud AJAX
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         return JsonResponse({'dashboard_detail': registros})
