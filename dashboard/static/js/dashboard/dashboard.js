@@ -122,7 +122,8 @@ async function getDetailsData(element) {
         }
         const data = await response.json();
         counter = 0;
-        data.dashboard_detail.forEach(details => {
+        const inverted = data.dashboard_detail.reverse();
+        inverted.forEach(details => {
             counter = counter + 1;
             coords = `${details.latitud}, ${details.longitud}`;
             rutaCoords.push([details.latitud, details.longitud]);
@@ -194,6 +195,7 @@ async function getDevicesData() {
                 </div>`
             ]).draw();  // Añadir fila y redibujar tabla  // Añadir fila y redibujar tabla
         });
+        actualizarUbicacionMarcadorDevices();
         hideSpinner();
     }
     catch {
@@ -254,7 +256,8 @@ function actualizarUbicacionMarcadorDevices() {
                 console.log(response);
                 
                 var coordenadas = response.coordenadas;
-
+                let currentZoom = myMap.getZoom();
+                let currentCenter = myMap.getCenter();
                 // Verifica si se recibieron coordenadas
                 if (!coordenadas) {
                     return;
@@ -283,6 +286,7 @@ function actualizarUbicacionMarcadorDevices() {
                         markers.push(marker);
                     }
                 }
+                myMap.setView(currentCenter, currentZoom);
             },
             error: function (error) {
                 console.log('Error:', error);
@@ -300,41 +304,43 @@ var lastlon;
 function actualizarRutaDetails() {
     if (dtails_dir == 0) {
         return;
-    }
-    $.ajax({
-        url: `/gethistory/${gpsid}/`,  // Usamos la URL modificada
-        method: 'GET',
-        dataType: 'json',
-        success: function (response) {
-            let registros = response.dashboard_detail;
-            if (!registros || registros.length === 0) {
-                return;
-            }
-            let currentZoom = myMap.getZoom();
-            let currentCenter = myMap.getCenter();
-            rutaCoords = [];
-            for (let i = 0; i < registros.length; i++) {
-                let lat = registros[i].latitud;
-                let lon = registros[i].longitud;
-                rutaCoords.push([lat, lon]);
-                if (i == registros.length - 1) {
-                    console.log('ultimo');
-                    lastlat = registros[i].latitud;
-                    lastlon = registros[i].longitud;
+    }else{
+        $.ajax({
+            url: `/gethistory/${gpsid}/`,  // Usamos la URL modificada
+            method: 'GET',
+            dataType: 'json',
+            success: function (response) {
+                let registros = response.dashboard_detail;
+                if (!registros || registros.length === 0) {
+                    return;
                 }
+                let currentZoom = myMap.getZoom();
+                let currentCenter = myMap.getCenter();
+                rutaCoords = [];
+                for (let i = 0; i < registros.length; i++) {
+                    let lat = registros[i].latitud;
+                    let lon = registros[i].longitud;
+                    rutaCoords.push([lat, lon]);
+                    if (i == registros.length - 1) {
+                        console.log('ultimo');
+                        lastlat = registros[i].latitud;
+                        lastlon = registros[i].longitud;
+                    }
+                }
+                if (marker) {
+                    marker.remove();
+                }
+    
+                marker = L.marker([lastlat, lastlon], {
+                    icon: iconMarker
+                }).addTo(myMap);
+                polyline = L.polyline(rutaCoords, { color: 'red' }).addTo(myMap);
+                // myMap.fitBounds(polyline.getBounds());
+                myMap.setView(currentCenter, currentZoom);
+            },
+            error: function (error) {
             }
-            if (marker) {
-                marker.remove();
-            }
-
-            polyline = L.polyline(rutaCoords, { color: 'red' }).addTo(myMap);
-            marker = L.marker([lastlat, lastlon], {
-                icon: iconMarker
-            }).addTo(myMap);
-            myMap.fitBounds(polyline.getBounds());
-            myMap.setView(currentCenter, currentZoom);
-        },
-        error: function (error) {
-        }
-    });
+        });
+    }
+    
 }
