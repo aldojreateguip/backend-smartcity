@@ -103,7 +103,7 @@ def get_history_gps(deviceId):
     dispositivo = deviceId
     fecha_actual = datetime.datetime.now().date()
     inicio = datetime.datetime.combine(fecha_actual, datetime.datetime.min.time())
-    fin = datetime.datetime.combine(fecha_actual, datetime.datetime.max.time())
+    fin = datetime.datetime.now()
     
     inicio_str = inicio.isoformat()+"Z"
     fin_str = fin.isoformat()+"Z"
@@ -118,7 +118,6 @@ def get_history_gps(deviceId):
     }
 
     response = requests.get(api_url, params=encodedParams, auth=(settings.API_USR_TRACCAR, settings.API_PSS_TRACCAR))
-
     if response.status_code == 200:
         data = response.json()
 

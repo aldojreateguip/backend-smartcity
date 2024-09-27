@@ -1,5 +1,5 @@
-const iconMarkerUrl = "{% static 'img/camion-2.png' %}";
-var dtails_dir = '0';
+const iconMarkerUrl = document.getElementById('mapa').getAttribute('data-icon-marker-url');
+var dtails_dir = 0;
 let iconMarker;
 // inicializar mapa
 let marker = null;
@@ -9,8 +9,9 @@ let dt_details_table;
 let urlOpenLayers;
 let dt_details;
 let dt_devices;
-
-
+let gpsid;
+let polyline;
+var rutaCoords = [];
 
 $(document).ready(function () {
     initMap();
@@ -18,11 +19,11 @@ $(document).ready(function () {
     init_dt_devices();
     init_dt_details();
     ocultar_details_table();
-    
+    actualizarUbicacionMarcadorDevices();
 });
 
 
-function initSettingsBtn(){
+function initSettingsBtn() {
     // Manejar el clic en la imagen del usuario
     $('[data-dropdown-toggle="dropdown-user"]').on('click', function () {
         $('#dropdown-user').toggleClass('hidden');
@@ -66,7 +67,6 @@ function init_dt_devices() {
         // },
         dom: '<"top"lf>t<"bottom"ip><"clear">', // Personaliza la estructura de la tabla
     });
-    dtails_dir = '0';
 }
 
 function init_dt_details() {
@@ -78,7 +78,6 @@ function init_dt_details() {
         // },
         dom: '<"top"lf>t<"bottom"ip><"clear">', // Personaliza la estructura de la tabla
     });
-    dtails_dir = '1';
 }
 
 function destroydt_details() {
@@ -94,11 +93,26 @@ function destroydt_devices() {
 
 
 async function getDetailsData(element) {
+    dtails_dir = 1;
     showSpinner();
     const id = element.id;
+    gpsid = id;
     document.getElementById('idCompactadora').innerHTML = '';
     document.getElementById('idCompactadora').textContent = id;
     ocultar_devices_table();
+    dt_details.clear();
+    if (polyline) {
+        myMap.removeLayer(polyline);
+    }
+    if (marker) {
+        marker.remove();
+    }
+    if (markers) {
+        for (var i in markers) {
+            myMap.removeLayer(markers[i]);
+        }
+        markers = [];  // Reiniciamos el array de marcadores
+    }
     try {
         const response = await fetch(`/dashboard/${id}/`, {
             method: 'GET',
@@ -107,20 +121,21 @@ async function getDetailsData(element) {
             throw new Error(`Error: ${response.statusText}`);
         }
         const data = await response.json();
-        console.log(data); // Limpiar datos existentes
-        dt_details.clear();  // Limpiar datos existentes
         counter = 0;
-        data.dashboard_detail.forEach(device => {
+        data.dashboard_detail.forEach(details => {
             counter = counter + 1;
+            coords = `${details.latitud}, ${details.longitud}`;
+            rutaCoords.push([details.latitud, details.longitud]);
             dt_details.row.add([
                 counter,
-                device.fecha,
-                `${device.latitud}, ${device.longitud}`, // Formato de latitud y longitud
-                device.velocidad,
-                device.distacia,
-                device.tiempoDetenido,
+                details.fecha,
+                coords, // Formato de latitud y longitud
+                details.velocidad,
+                details.distancia,
+                details.tiempoDetenido,
             ]).draw();  // Añadir fila y redibujar tabla
         });
+        polyline = L.polyline(rutaCoords, { color: 'red' }).addTo(myMap);
     }
     catch {
         toastr.error("Ha ocurrido un error en la actualizacion de datos");
@@ -130,8 +145,16 @@ async function getDetailsData(element) {
 
 
 async function getDevicesData() {
+    dtails_dir = 0;
     showSpinner();
     ocultar_details_table();
+    
+    if (polyline) {
+        myMap.removeLayer(polyline);
+    }
+    if (marker) {
+        marker.remove();
+    }
     try {
         const response = await fetch('/getdevicesdata/', {
             method: 'GET',
@@ -197,6 +220,7 @@ document.getElementById('toggleButton').addEventListener('click', function () {
     }
 });
 
+var markers = [];
 
 function initMap() {
     myMap = L.map('mapa').setView([-3.746241, -73.2478283], 13);
@@ -214,81 +238,103 @@ function initMap() {
     });
 }
 
-// if (dtails_dir == '0') {
-//     setInterval(actualizarUbicacionMarcadorDevices, 3000);
-// } else {
-//     setInterval(actualizarRutaDetails, 3000);
-// }
+setInterval(actualizarUbicacionMarcadorDevices, 10000);
+setInterval(actualizarRutaDetails, 10000);
+
 
 function actualizarUbicacionMarcadorDevices() {
-    $.ajax({
-        url: '/getmarker/',
-        method: 'GET',
-        dataType: 'json',
-        success: function (response) {
-            var latitude = response.latitud;
-            var longitude = response.longitud;
+    if (dtails_dir == 1) {
+        return;
+    } else {
+        $.ajax({
+            url: `/getmarker/`,
+            method: 'GET',
+            dataType: 'json',
+            success: function (response) {
+                console.log(response);
+                
+                var coordenadas = response.coordenadas;
 
-            if (latitude === undefined || longitude === undefined || latitude === null || longitude === null) {
-                // console.log('No se encontraron datos para el marcador.');
-                return;
+                // Verifica si se recibieron coordenadas
+                if (!coordenadas) {
+                    return;
+                }
+
+                // Eliminar todos los marcadores anteriores (si es necesario)
+                if (markers) {
+                    for (var i in markers) {
+                        myMap.removeLayer(markers[i]);
+                    }
+                    markers = [];  // Reiniciamos el array de marcadores
+                }
+
+                // Iterar a través de los dispositivos y agregar un marcador para cada uno
+                for (var deviceId in coordenadas) {
+                    var latitud = coordenadas[deviceId].latitude;
+                    var longitud = coordenadas[deviceId].longitude;
+
+                    // Verificamos si las coordenadas son válidas
+                    if (latitud !== undefined && longitud !== undefined) {
+                        var marker = L.marker([latitud, longitud], {
+                            icon: iconMarker
+                        }).addTo(myMap);
+
+                        // Almacenar el marcador en un array si quieres manejar múltiples marcadores
+                        markers.push(marker);
+                    }
+                }
+            },
+            error: function (error) {
+                console.log('Error:', error);
             }
-
-            if (marker) {
-                myMap.removeLayer(marker);
-            }
-
-            marker = L.marker([latitude, longitude], {
-                icon: iconMarker
-            }).addTo(myMap);
-
-            // setTimeout(actualizarUbicacionMarcador, 3000);
-        },
-        error: function (error) {
-            console.log('Error al obtener la ubicación del marcador:', error);
-        }
-    });
+        });
+    }
 }
 
+// Definir el array de marcadores al inicio
+
+
+var lastlat;
+var lastlon;
 
 function actualizarRutaDetails() {
-    // Obtener la URL actual
-    let currentUrl = window.location.pathname;
-
-    // Reemplazar "dashboard" por "gethistory" en la URL
-    let newUrl = currentUrl.replace('dashboard', 'gethistory');
-
+    if (dtails_dir == 0) {
+        return;
+    }
     $.ajax({
-        url: newUrl,  // Usamos la URL modificada
+        url: `/gethistory/${gpsid}/`,  // Usamos la URL modificada
         method: 'GET',
         dataType: 'json',
         success: function (response) {
             let registros = response.dashboard_detail;
-
-            // Verificar si hay datos
             if (!registros || registros.length === 0) {
-                // console.log('No se encontraron datos.');
-                return;  // Salir de la función si no hay datos
+                return;
             }
-
+            let currentZoom = myMap.getZoom();
+            let currentCenter = myMap.getCenter();
             rutaCoords = [];
-
             for (let i = 0; i < registros.length; i++) {
                 let lat = registros[i].latitud;
                 let lon = registros[i].longitud;
                 rutaCoords.push([lat, lon]);
+                if (i == registros.length - 1) {
+                    console.log('ultimo');
+                    lastlat = registros[i].latitud;
+                    lastlon = registros[i].longitud;
+                }
             }
-
-            if (polyline) {
-                myMap.removeLayer(polyline);
+            if (marker) {
+                marker.remove();
             }
 
             polyline = L.polyline(rutaCoords, { color: 'red' }).addTo(myMap);
-
+            marker = L.marker([lastlat, lastlon], {
+                icon: iconMarker
+            }).addTo(myMap);
             myMap.fitBounds(polyline.getBounds());
+            myMap.setView(currentCenter, currentZoom);
         },
         error: function (error) {
-            // console.log('Error al obtener nuevas coordenadas:', error);
         }
     });
 }

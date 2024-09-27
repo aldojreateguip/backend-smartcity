@@ -54,7 +54,7 @@ else:
 TRACCAR_URL_BASE = env('TRACCAR_URL_BASE')
 # Application definition
 
-print(ALLOWED_HOSTS)
+# print(ALLOWED_HOSTS)
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -115,16 +115,16 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': env('DB_ENGINE_PROD'),
+    #     'NAME': env('DB_NAME_PROD'),
+    #     'USER': env('DB_USER_PROD'),
+    #     'PASSWORD': env('DB_PASSWORD_PROD'),
+    #     'HOST': env('DB_HOST_PROD'),
+    #     'PORT': env('DB_PORT_PROD'),
+    #     'OPTIONS': {'sql_mode': 'STRICT_ALL_TABLES'},
+    # },
     'default': {
-        'ENGINE': env('DB_ENGINE_PROD'),
-        'NAME': env('DB_NAME_PROD'),
-        'USER': env('DB_USER_PROD'),
-        'PASSWORD': env('DB_PASSWORD_PROD'),
-        'HOST': env('DB_HOST_PROD'),
-        'PORT': env('DB_PORT_PROD'),
-        'OPTIONS': {'sql_mode': 'STRICT_ALL_TABLES'},
-    },
-    'local': {
         'ENGINE': env('DB_ENGINE'),
         'NAME': env('DB_NAME'),
         'USER': env('DB_USER'),
