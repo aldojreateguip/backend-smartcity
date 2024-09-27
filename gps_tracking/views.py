@@ -102,7 +102,8 @@ def get_history_gps(deviceId):
     # dispositivo = request.data.get('dispositivo')
     dispositivo = deviceId
     fecha_actual = datetime.datetime.now().date()
-    inicio = datetime.datetime.combine(fecha_actual, datetime.datetime.min.time())
+    # Establecer inicio con la fecha actual y hora mínima 00:00:01
+    inicio = datetime.datetime.combine(fecha_actual, datetime.time(0, 0, 1))
     fin = datetime.datetime.now()
     
     inicio_str = inicio.isoformat()+"Z"
@@ -116,7 +117,7 @@ def get_history_gps(deviceId):
         "from": inicio_str,
         "to": fin_str
     }
-
+    print(f'parametros de busqueda historial" {encodedParams}')
     response = requests.get(api_url, params=encodedParams, auth=(settings.API_USR_TRACCAR, settings.API_PSS_TRACCAR))
     if response.status_code == 200:
         data = response.json()
@@ -133,9 +134,7 @@ def get_history_gps(deviceId):
             motion = posicion['attributes']['motion']
             fecha_hora_utc = posicion.get('deviceTime')
             prefecha = datetime.datetime.strptime(fecha_hora_utc,'%Y-%m-%dT%H:%M:%S.%f%z')
-            zona_horaria = pytz.timezone('America/Lima')
-            fecha_hora_ajustada = prefecha.astimezone(zona_horaria)
-            fecha = fecha_hora_ajustada.strftime('%Y-%m-%d %H:%M:%S')
+            fecha = prefecha.strftime('%Y-%m-%d %H:%M:%S')
 
             tiempo_detenido = 0
 
