@@ -97,68 +97,81 @@ def tracking(request):
         return {'status': 'error'}
 
 # @api_view(['POST'])
-def get_history_gps(deviceId):
-# def get_history_gps(dispositivo, inicio, fin):
-    # dispositivo = request.data.get('dispositivo')
-    dispositivo = deviceId
-    fecha_actual = datetime.datetime.now().date()
-    # Establecer inicio con la fecha actual y hora mínima 00:00:01
-    inicio = datetime.datetime.combine(fecha_actual, datetime.time(0, 0, 1))
-    fin = datetime.datetime.now()
-    
-    inicio_str = inicio.isoformat()+"Z"
-    fin_str = fin.isoformat()+"Z"
-    api_url = settings.TRACCAR_URL_BASE + '/api/positions'
-    
-    # formatear fecha utc-5 a utc iso 8601
+def formatear_decimales(valor):
+    return "{:.2f}".format(valor)
 
+def formatear_distancia(distancia):
+    return "{:.2f} metros".format(distancia)
+
+def obtener_formato_tiempo(segundos):
+    horas, resto = divmod(segundos, 3600)
+    minutos, segundos = divmod(resto, 60)
+    return f"{int(horas)}h {int(minutos)}m {int(segundos)}s"
+
+def get_history_gps(deviceId):
+    dispositivo = deviceId
+
+    # Definir zona horaria UTC
+    tz_utc = pytz.UTC
+    tz_utc_minus_5 = pytz.timezone('America/Bogota')  # Cambiar según sea necesario para UTC-5
+
+    # Fecha actual en UTC
+    fecha_actual = datetime.datetime.now(tz=tz_utc).date()
+
+    # Establecer inicio con la fecha actual en UTC (00:00:01)
+    inicio = datetime.datetime.combine(fecha_actual, datetime.time(0, 0, 1), tzinfo=tz_utc)
+    fin = datetime.datetime.now(tz=tz_utc)
+
+    # Convertir a formato ISO con 'Z' (indicador de UTC)
+    inicio_str = inicio.isoformat().replace("+00:00", "Z")
+    fin_str = fin.isoformat().replace("+00:00", "Z")
+
+    api_url = settings.TRACCAR_URL_BASE + '/api/positions'
+
+    # Parámetros para la API
     encodedParams = {
         "deviceId": dispositivo,
         "from": inicio_str,
         "to": fin_str
     }
-    print(f'parametros de busqueda historial" {encodedParams}')
+
+    # Solicitud a la API
     response = requests.get(api_url, params=encodedParams, auth=(settings.API_USR_TRACCAR, settings.API_PSS_TRACCAR))
+
     if response.status_code == 200:
         data = response.json()
 
-        # formatear fecha utc iso 8601 a utc-5
-
         registros = []
-
-        ultima_posicion = 0 
-        ultima_posicion_distancia = 0
+        ultima_posicion = None 
+        ultima_posicion_distancia = None
 
         for posicion in data:
             velocidad = posicion.get('speed')
             motion = posicion['attributes']['motion']
             fecha_hora_utc = posicion.get('deviceTime')
-            prefecha = datetime.datetime.strptime(fecha_hora_utc,'%Y-%m-%dT%H:%M:%S.%f%z')
-            fecha = prefecha.strftime('%Y-%m-%d %H:%M:%S')
+
+            # Convertir la fecha desde UTC a UTC-5
+            prefecha_utc = datetime.datetime.strptime(fecha_hora_utc, '%Y-%m-%dT%H:%M:%S.%f%z')
+            prefecha_utc_minus_5 = prefecha_utc.astimezone(tz_utc_minus_5)
+            fecha_formateada = prefecha_utc_minus_5.strftime('%Y-%m-%d %H:%M:%S')
 
             tiempo_detenido = 0
-
             if motion:
-                tiempo_detenido = 0
                 evento = 'Movimiento'
             else:
                 evento = 'Detenido'
 
             if velocidad == 0:
-                tiempo_actual = datetime.datetime.strptime(posicion.get('deviceTime'), "%Y-%m-%dT%H:%M:%S.%f%z")
-            
+                tiempo_actual = prefecha_utc
                 if ultima_posicion:
                     tiempo_detenido = (tiempo_actual - ultima_posicion).total_seconds()
-
                 ultima_posicion = tiempo_actual
 
             distancia_recorrida = 0.0
-
             if ultima_posicion_distancia:
                 coordenadas_actual = (posicion.get('latitude'), posicion.get('longitude'))
                 coordenadas_anterior = (ultima_posicion_distancia.get('latitude'), ultima_posicion_distancia.get('longitude'))
                 distancia_recorrida = geodesic(coordenadas_anterior, coordenadas_actual).meters
-                
 
             posicion['tiempo_detenido'] = obtener_formato_tiempo(tiempo_detenido)
             posicion['distancia_recorrida'] = distancia_recorrida
@@ -166,19 +179,18 @@ def get_history_gps(deviceId):
             history = {
                 "motion": motion,
                 "evento": evento,
-                "velocidad": formatear_decimales(posicion.get('speed')) + " Km/h",
-                # "unidadVelocidad": 'Km/h',
+                "velocidad": formatear_decimales(velocidad) + " Km/h",
                 "latitud": posicion.get('latitude'),
                 "longitud": posicion.get('longitude'),
-                "fecha": fecha,
+                "fecha": fecha_formateada,  # Fecha en UTC-5
                 "distancia": formatear_distancia(distancia_recorrida),
                 "tiempoDetenido": posicion['tiempo_detenido']
             }
             registros.append(history)
             ultima_posicion_distancia = posicion
 
-        # return registros
-        return JsonResponse({"registros":registros})
+        return JsonResponse({"registros": registros})
+
     return JsonResponse({"error": "Ocurrió un error en la conexión"}, status=500)
 
 def obtener_formato_tiempo(segundos):
